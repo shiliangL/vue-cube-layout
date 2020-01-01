@@ -1,4 +1,4 @@
-# vue-cuber-side-bar
+# vue-cuber-layout
 
 ## Project setup
 ```
