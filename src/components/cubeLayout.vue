@@ -47,6 +47,7 @@
 <script>
 
 import { GridLayout, GridItem } from 'vue-grid-layout'
+ 
 export default {
   name: 'cubeLayout',
   components: {
