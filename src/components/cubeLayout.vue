@@ -47,9 +47,9 @@
 <script>
 
 import { GridLayout, GridItem } from 'vue-grid-layout'
- 
+
 export default {
-  name: 'cubeLayout',
+  name: 'CubeLayout',
   components: {
     GridLayout,
     GridItem
@@ -57,14 +57,14 @@ export default {
   data() {
     return {
       layout: [
-        { "x": 0, "y": 0, "w": 2, "h": 5, "i": "0", static: false },
-        { "x": 2, "y": 0, "w": 2, "h": 5, "i": "1", static: false },
-        { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2", static: false },
-        { "x": 6, "y": 0, "w": 2, "h": 5, "i": "3", static: false },
-        { "x": 8, "y": 0, "w": 2, "h": 5, "i": "4", static: false },
+        { 'x': 0, 'y': 0, 'w': 2, 'h': 5, 'i': '0', static: false },
+        { 'x': 2, 'y': 0, 'w': 2, 'h': 5, 'i': '1', static: false },
+        { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2', static: false },
+        { 'x': 6, 'y': 0, 'w': 2, 'h': 5, 'i': '3', static: false },
+        { 'x': 8, 'y': 0, 'w': 2, 'h': 5, 'i': '4', static: false }
       ]
     }
-  },
+  }
 }
 </script>
 
