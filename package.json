@@ -5,14 +5,17 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "fix": "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.4.0",
+    "axios": "^0.19.1",
     "core-js": "^3.4.3",
     "element-ui": "^2.13.0",
     "vue": "^2.6.10",
-    "vue-grid-layout": "^2.3.7"
+    "vue-grid-layout": "^2.3.7",
+    "vue-worker": "^1.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
