@@ -38,39 +38,26 @@ import nestedRouter from './modules/nested'
  */
 export const asyncRoutes = [
   {
-    path: '/example',
+    path: '/basicManagement',
     component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
+    redirect: '/basicManagement/segmentInformation',
+    name: 'segmentInformation',
     meta: {
-      title: 'Example',
+      title: '基础信息管理',
       icon: 'example'
     },
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: '表格列表', icon: 'table' }
+        path: 'segmentInformation',
+        component: () => import('../views/basicInforMation/segmentInformation'),
+        name: 'segmentInformation',
+        meta: { title: '标段信息管理', icon: 'example' }
       },
       {
-        path: 'video',
-        component: () => import('@/views/example/video'),
-        name: 'video',
-        meta: { title: '视频测试', icon: 'component' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'Article List', icon: 'list' }
+        path: 'segmentInformation',
+        component: () => import('../views/basicInforMation/segmentInformation'),
+        name: 'segmentInformation',
+        meta: { title: '标段信息管理', icon: 'example' }
       }
     ]
   },
