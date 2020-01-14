@@ -1,4 +1,8 @@
 /**
+ * Created by PanJiaChen on 16/11/18.
+ */
+
+/**
  * Parse the time to string
  * @param {(Object|string|number)} time
  * @param {string} cFormat
@@ -33,7 +37,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -70,14 +74,14 @@ export function formatTime(time, option) {
   } else {
     return (
       d.getMonth() +
-            1 +
-            '月' +
-            d.getDate() +
-            '日' +
-            d.getHours() +
-            '时' +
-            d.getMinutes() +
-            '分'
+      1 +
+      '月' +
+      d.getDate() +
+      '日' +
+      d.getHours() +
+      '时' +
+      d.getMinutes() +
+      '分'
     )
   }
 }
@@ -156,12 +160,12 @@ export function param2Obj(url) {
   }
   return JSON.parse(
     '{"' +
-        decodeURIComponent(search)
-          .replace(/"/g, '\\"')
-          .replace(/&/g, '","')
-          .replace(/=/g, '":"')
-          .replace(/\+/g, ' ') +
-        '"}'
+      decodeURIComponent(search)
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"')
+        .replace(/\+/g, ' ') +
+      '"}'
   )
 }
 
@@ -213,8 +217,8 @@ export function toggleClass(element, className) {
     classString += '' + className
   } else {
     classString =
-            classString.substr(0, nameIndex) +
-            classString.substr(nameIndex + className.length)
+      classString.substr(0, nameIndex) +
+      classString.substr(nameIndex + className.length)
   }
   element.className = classString
 }
@@ -237,7 +241,7 @@ export function getTime(type) {
  * @param {boolean} immediate
  * @return {*}
  */
-export function debounce(func, wait, immediate) {
+export function debounce1(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
   const later = function() {
@@ -346,31 +350,31 @@ export function getRandomID(length = 36) {
   return Number(Math.random().toString().substr(3, length) + Date.now()).toString(36)
 }
 
-// 格式化时、分、秒
-export function getformTime(time, cFormat) {
-  if (arguments.length === 0 || time == null) {
-    return null
+export function debounce(delay, callback) {
+  let lastTime
+  return function() {
+    clearTimeout(lastTime)
+    const [that, args] = [this, arguments]
+    lastTime = setTimeout(() => {
+      callback.apply(that, args)
+    }, delay)
   }
-  const timeArr = time.toString().split(':')
-  const format = cFormat || '{h}:{i}:{s}'
-  const time_str = format.replace(/{(h|i|s)+}/g, (result, key) => {
-    if (key === 'h') {
-      return timeArr[0]
-    } else if (key === 'i') {
-      return timeArr[1]
-    } else if (key === 's') {
-      return timeArr[2]
-    }
-  })
-  return time_str
 }
 
-// 当前时间
-export function getCurrentDay() {
-  return parseTime(new Date(), '{y}-{m}-{d}')
+export function observerDomResize(dom, callback) {
+  const MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+
+  const observer = new MutationObserver(callback)
+
+  observer.observe(dom, { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
+
+  return observer
 }
 
-// 截取字符串后几位
-export function getLastLengthMembers(string, length = 0) {
-  return string.slice(-length)
+export function deepMerge(target, merged) {
+  for (var key in merged) {
+    target[key] = target[key] && target[key].toString() === '[object Object]' ? deepMerge(target[key], merged[key]) : target[key] = merged[key]
+  }
+
+  return target
 }

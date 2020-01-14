@@ -1,0 +1,81 @@
+.table-list {
+  font-family: 'Microsoft YaHei';
+  width: 100%;
+  font-size: 1rem;
+  empty-cells: show;
+  table-layout: fixed;
+  word-wrap: break-word;
+  border-collapse: collapse;
+  margin: 0 auto;
+  border: none;
+}
+
+.table-list thead {
+  height: 30px;
+}
+
+.table-list thead th {
+  font-size: 0.8rem;
+  color: black;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  background: #DFECF9;
+  text-align: center;
+  font-size: .875rem
+    /* 14/16 */
+  ;
+  font-weight: bold;
+}
+
+.table-list thead th.is-leaf {
+  border: 1px solid #ebeef5;
+}
+
+.table-list thead th div {
+  color: black;
+  background-color: rgba(0, 0, 0, 0)
+}
+
+;
+
+.table-list tbody {
+  overflow-y: scroll;
+}
+
+.table-list tbody tr {
+  border: none;
+  height: 40px;
+  cursor: pointer;
+}
+
+.table-list tbody tr:hover {
+  background-color: #F6F6F6;
+}
+
+.table-list tbody tr td {
+  color: #606266;
+  border-left: 1px solid #ebeef5 !important;
+  border-bottom: 1px solid #ebeef5 !important;
+  border-right: 1px solid #ebeef5 !important;
+  text-align: center;
+  height: 40px;
+  word-wrap: break-word;
+  padding: 0;
+  font-size: 14px;
+}
+
+
+.table-list tbody tr td .el-button+.el-button {
+  margin-left: 0px;
+}
+
+.el-table__body,
+.el-table__header {
+  width: 100% !important;
+  text-align: left;
+}
+
+.el-table__body-wrapper {
+  overflow-y: auto;
+}

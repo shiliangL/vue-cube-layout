@@ -1,29 +1,32 @@
-# vue-cuber-layout
+#### 一些备注说明
 
-## Project setup
-```
-yarn install
-```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+1、 地图组件文档  https://dafrok.github.io/vue-baidu-map/#/
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+# 基础信息管理  basicManagement
 
-### Run your tests
-```
-yarn run test
-```
+ - 标段信息管理
+ - 合同信息管理
+....
 
-### Lints and fixes files
-```
-yarn run lint
-```
+# 基础车辆维护 carsManagement
+ 
+ - 车辆维护信息
+ - 车辆加油信息
+....
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 中转站运行管理 transferManagement
+
+ - 中转站首页
+ - 中转站管理
+....
+
+# 公厕站运行管理 toiletsManagement
+
+ - 公厕首页
+....
+
+# 系统管理
+
+ - 中转站首页
+....
