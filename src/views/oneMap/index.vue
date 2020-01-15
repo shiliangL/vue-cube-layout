@@ -1,10 +1,14 @@
 <template>
-  <div ref="OneMap" class="OneMap" @click="toScreenfull">
+  <div id="OneMap" ref="OneMap" class="OneMap">
+    <svg-icon class="fullscreen-icon" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="toScreenfull" />
     一张图
   </div>
 </template>
 
 <script>
+
+import screenfull from 'screenfull'
+
 export default {
   name: 'OneMap',
   components: {
@@ -12,12 +16,40 @@ export default {
   },
   data() {
     return {
-
+      isFullscreen: false
     }
+  },
+
+  mounted() {
+    this.init()
+  },
+  beforeDestroy() {
+    this.destroy()
   },
   methods: {
     toScreenfull() {
-      this.$refs['OneMap']
+      if (!screenfull.enabled) {
+        this.$message({
+          message: 'you browser can not work',
+          type: 'warning'
+        })
+        return false
+      }
+      const element = document.getElementById('OneMap')
+      screenfull.toggle(element)
+    },
+    change() {
+      this.isFullscreen = screenfull.isFullscreen
+    },
+    init() {
+      if (screenfull.enabled) {
+        screenfull.on('change', this.change)
+      }
+    },
+    destroy() {
+      if (screenfull.enabled) {
+        screenfull.off('change', this.change)
+      }
     }
   }
 }
@@ -35,5 +67,14 @@ export default {
   box-shadow: 0 0 3px #100925;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+.fullscreen-icon{
+  cursor: pointer;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: #b9b9b9;
+  z-index: 10;
 }
 </style>

@@ -52,6 +52,60 @@ export const asyncRoutes = [
         component: () => import('../views/basicInforMation/segmentInformation'),
         name: 'segmentInformation',
         meta: { title: '标段信息管理', icon: 'example' }
+      },
+      {
+        path: 'contractInformation',
+        component: () => import('../views/basicInforMation/contractInformation'),
+        name: 'contractInformation',
+        meta: { title: '合同信息管理', icon: 'example' }
+      },
+      {
+        path: 'peopleManagement',
+        component: () => import('../views/basicInforMation/peopleManagement'),
+        name: 'peopleManagement',
+        meta: { title: '人员基本管理', icon: 'example' }
+      },
+      {
+        path: 'vehiclesManagement',
+        component: () => import('../views/basicInforMation/vehiclesManagement'),
+        name: 'vehiclesManagement',
+        meta: { title: '车辆基本管理', icon: 'example' }
+      },
+      {
+        path: 'trashManagement',
+        component: () => import('../views/basicInforMation/trashManagement'),
+        name: 'trashManagement',
+        meta: { title: '垃圾桶管理', icon: 'example' }
+      },
+      {
+        path: 'garbageCollection',
+        component: () => import('../views/basicInforMation/garbageCollection'),
+        name: 'garbageCollection',
+        meta: { title: '垃圾收集点管理', icon: 'example' }
+      },
+      {
+        path: 'wasteSource',
+        component: () => import('../views/basicInforMation/wasteSource'),
+        name: 'wasteSource',
+        meta: { title: '垃圾源头管理', icon: 'example' }
+      },
+      {
+        path: 'intelligeHardware',
+        component: () => import('../views/basicInforMation/intelligeHardware'),
+        name: 'intelligeHardware',
+        meta: { title: '智能硬件管理', icon: 'example' }
+      },
+      {
+        path: 'vehicleMaintenance',
+        component: () => import('../views/basicInforMation/vehicleMaintenance'),
+        name: 'vehicleMaintenance',
+        meta: { title: '车辆维护单位管理', icon: 'example' }
+      },
+      {
+        path: 'gasStandard',
+        component: () => import('../views/basicInforMation/gasStandard'),
+        name: 'gasStandard',
+        meta: { title: '气体标准管理', icon: 'example' }
       }
     ]
   },
