@@ -137,6 +137,7 @@ export default {
       })
     },
     submitBtn(form) {
+      this.$router.push({ path: this.redirect || '/' })
       this.$refs[form].validate(valid => {
         if (valid) {
           this.loading = true
