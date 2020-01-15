@@ -329,6 +329,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/oneMap',
+    component: Layout,
+    redirect: '/oneMap',
+    children: [
+      {
+        path: 'oneMap',
+        component: () => import('@/views/oneMap/index'),
+        name: 'oneMap',
+        meta: { title: 'oneMap', icon: 'component', affix: true }
+      }
+    ]
+  },
+  {
     path: '/qwerComponentDemo',
     component: Layout,
     redirect: 'cubeTableRender',
