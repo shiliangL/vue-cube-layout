@@ -110,6 +110,138 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/carsManagement',
+    component: Layout,
+    redirect: '/carsManagement/carsMaintenance',
+    name: 'carsManagement',
+    meta: {
+      title: '车辆维护',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'carsMaintenance',
+        component: () => import('../views/carsManagement/carsMaintenance'),
+        name: 'carsMaintenance',
+        meta: { title: '车辆维护管理', icon: 'example' }
+      },
+      {
+        path: 'carsRefueling',
+        component: () => import('../views/carsManagement/carsRefueling'),
+        name: 'carsRefueling',
+        meta: { title: '车辆加油管理', icon: 'example' }
+      },
+      {
+        path: 'carsRepair',
+        component: () => import('../views/carsManagement/carsRepair'),
+        name: 'carsRepair',
+        meta: { title: '车辆维修管理', icon: 'example' }
+      }
+    ]
+  },
+  {
+    path: '/transferManagement',
+    component: Layout,
+    redirect: '/transferManagement/transferAccount',
+    name: 'transferManagement',
+    meta: {
+      title: '中转站运行管理',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'transferAccount',
+        component: () => import('../views/transferManagement/transferAccount'),
+        name: 'transferAccount',
+        meta: { title: '中转站台账', icon: 'example' }
+      },
+      {
+        path: 'transferstaManagement',
+        component: () => import('../views/transferManagement/transferstaManagement'),
+        name: 'transferstaManagement',
+        meta: { title: '中转站管理', icon: 'example' }
+      },
+      {
+        path: 'compressionBox',
+        component: () => import('../views/transferManagement/compressionBox'),
+        name: 'compressionBox',
+        meta: { title: '压缩箱管理', icon: 'example' }
+      },
+      {
+        path: 'weighbridgeRecord',
+        component: () => import('../views/transferManagement/weighbridgeRecord'),
+        name: 'weighbridgeRecord',
+        meta: { title: '地磅称重记录', icon: 'example' }
+      },
+      {
+        path: 'transferCollection',
+        component: () => import('../views/transferManagement/transferCollection'),
+        name: 'transferCollection',
+        meta: { title: '转运站收运记录', icon: 'example' }
+      },
+      {
+        path: 'transferYard',
+        component: () => import('../views/transferManagement/transferYard'),
+        name: 'transferYard',
+        meta: { title: '转运站送场记录', icon: 'example' }
+      }
+    ]
+  },
+  {
+    path: '/toiletsManagement',
+    component: Layout,
+    redirect: '/toiletsManagement/toiletsAccount',
+    name: 'toiletsManagement',
+    meta: {
+      title: '公厕运行管理',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'toiletsAccount',
+        component: () => import('../views/toiletsManagement/toiletsAccount'),
+        name: 'toiletsAccount',
+        meta: { title: '公厕台账', icon: 'example' }
+      },
+      {
+        path: 'toiletsInformation',
+        component: () => import('../views/toiletsManagement/toiletsInformation'),
+        name: 'toiletsInformation',
+        meta: { title: '公厕基本信息', icon: 'example' }
+      },
+      {
+        path: 'toiletsGasAccount',
+        component: () => import('../views/toiletsManagement/toiletsGasAccount'),
+        name: 'toiletsGasAccount',
+        meta: { title: '公厕气体台账', icon: 'example' }
+      },
+      {
+        path: 'toiletsGasInformation',
+        component: () => import('../views/toiletsManagement/toiletsGasInformation'),
+        name: 'toiletsGasInformation',
+        meta: { title: '公厕气体异常信息', icon: 'example' }
+      }
+    ]
+  },
+  {
+    path: '/systeManagement',
+    component: Layout,
+    redirect: '/systeManagement/systeManagement',
+    name: 'systeManagement',
+    meta: {
+      title: '系统管理',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'systeManagement',
+        component: () => import('../views/systeManagement/systeManagement'),
+        name: 'systeManagement',
+        meta: { title: '系统日志', icon: 'example' }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
