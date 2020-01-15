@@ -1,6 +1,26 @@
 <template>
   <div id="OneMap" ref="OneMap" class="OneMap">
     <svg-icon class="fullscreen-icon" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="toScreenfull" />
+
+    <baidu-map
+      :map-click="false"
+      :center="mapData.center"
+      :zoom="mapData.zoom"
+      class="bm-view"
+      @ready="mapReady"
+    >
+      <bm-boundary
+        :fill-opacity="0"
+        :mass-clear="false"
+        :stroke-weight="2"
+        name="中国"
+        stroke-color="red"
+        fill-color=""
+      />
+
+      <!-- 测试 -->
+    </baidu-map>
+
     一张图
   </div>
 </template>
@@ -16,7 +36,11 @@ export default {
   },
   data() {
     return {
-      isFullscreen: false
+      isFullscreen: false,
+      mapData: {
+        center: { lng: 114.12744, lat: 22.64469 },
+        zoom: 5
+      }
     }
   },
 
@@ -27,6 +51,9 @@ export default {
     this.destroy()
   },
   methods: {
+    mapReady(e) {
+      this.map = e.map
+    },
     toScreenfull() {
       if (!screenfull.enabled) {
         this.$message({
@@ -68,6 +95,11 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
+
+  .bm-view{
+     height: 100%;
+  width: 100%;
+  }
 }
 .fullscreen-icon{
   cursor: pointer;
