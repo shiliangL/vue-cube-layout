@@ -7,8 +7,7 @@
 
  - 标段信息管理 segmentInformation
  - 合同信息管理 contractInformation
-
- 人员基本信息  peopleInformation
+ - 人员基本信息  peopleInformation
 
 ....
 
