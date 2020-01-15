@@ -41,18 +41,12 @@ export const asyncRoutes = [
     path: '/basicManagement',
     component: Layout,
     redirect: '/basicManagement/segmentInformation',
-    name: 'segmentInformation',
+    name: 'basicManagement',
     meta: {
       title: '基础信息管理',
       icon: 'example'
     },
     children: [
-      {
-        path: 'segmentInformation',
-        component: () => import('../views/basicInforMation/segmentInformation'),
-        name: 'segmentInformation',
-        meta: { title: '标段信息管理', icon: 'example' }
-      },
       {
         path: 'segmentInformation',
         component: () => import('../views/basicInforMation/segmentInformation'),

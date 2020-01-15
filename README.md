@@ -5,8 +5,8 @@
 
 # 基础信息管理  basicManagement
 
- - 标段信息管理
- - 合同信息管理
+ - 标段信息管理 segmentInformation
+ - 合同信息管理 contractInformation
 ....
 
 # 基础车辆维护 carsManagement
