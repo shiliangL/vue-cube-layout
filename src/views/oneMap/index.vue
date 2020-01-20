@@ -1,6 +1,14 @@
 <template>
-  <div id="OneMap" ref="OneMap" class="OneMap">
-    <svg-icon class="fullscreen-icon" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="toScreenfull" />
+  <div
+    id="OneMap"
+    ref="OneMap"
+    class="OneMap"
+  >
+    <svg-icon
+      class="fullscreen-icon"
+      :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"
+      @click="toScreenfull"
+    />
 
     <baidu-map
       :map-click="false"
@@ -27,7 +35,10 @@
 
 <script>
 
+import mapStyle from '@/utils/mapStyle'
+import areaData from './data/areaData'
 import screenfull from 'screenfull'
+const markerImg = require('@/assets/allcar.png')
 
 export default {
   name: 'OneMap',
@@ -38,7 +49,7 @@ export default {
     return {
       isFullscreen: false,
       mapData: {
-        center: { lng: 114.12744, lat: 22.64469 },
+        center: { lng: 105.02744, lat: 38.64469 },
         zoom: 5
       }
     }
@@ -53,7 +64,37 @@ export default {
   methods: {
     mapReady(e) {
       this.map = e.map
+      this.map.setMapStyle(mapStyle)
+      // this.map.disableDragging()
+      this.initAreaData(areaData, e.map)
     },
+
+    initAreaData(data) {
+      data.map((v, i) => {
+        // eslint-disable-next-line no-undef
+        const point = new BMap.Point(v.point[0], v.point[1])
+        // eslint-disable-next-line no-undef
+        const myIcon = new BMap.Icon(markerImg, new BMap.Size(20, 20), {
+          // eslint-disable-next-line no-undef
+          imageSize: new BMap.Size(20, 20)
+        })
+        // eslint-disable-next-line no-undef
+        const marker = new BMap.Marker(point, { icon: myIcon })
+        // eslint-disable-next-line no-undef
+        const label = new BMap.Label(`${v.name}<br/> 设备总数: ${v.total}<br/> 在线数量: ${v.online}`, { offset: new BMap.Size(-0, -0) })
+        label.setStyle({
+          color: '#fff',
+          border: 'none',
+          padding: '1rem 1rem',
+          fontWeight: 600,
+          backgroundColor: 'rgba(0,0,0,.3)',
+          borderRadius: '1rem;'
+        })
+        marker.setLabel(label)
+        this.map.addOverlay(marker)
+      })
+    },
+
     toScreenfull() {
       if (!screenfull.enabled) {
         this.$message({
@@ -85,7 +126,7 @@ export default {
 <style lang="scss" scoped>
 .OneMap {
   height: 100%;
-  width: 99%;
+  width: 100%;
   background-size: cover;
   background-position: center;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -96,12 +137,12 @@ export default {
   flex-direction: column;
   position: relative;
 
-  .bm-view{
-     height: 100%;
-  width: 100%;
+  .bm-view {
+    height: 100%;
+    width: 100%;
   }
 }
-.fullscreen-icon{
+.fullscreen-icon {
   cursor: pointer;
   position: absolute;
   top: 6px;
