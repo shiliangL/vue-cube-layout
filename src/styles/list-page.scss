@@ -5,11 +5,11 @@
  */
 .search-bar {
   width: 100%;
-  margin: 10px 0;
-  padding: 8px 5px;
+  padding: 5px 0;
+  margin-bottom: 5px;
   background-color: white;
   clear: both;
-
+  border-bottom: 1px solid #dfe6ec;
   &:after {
     visibility: hidden;
     display: block;
@@ -44,7 +44,7 @@
   }
 
   .right {
-    float: right;
+    float: left;
     margin-right: 5px;
   }
 

@@ -18,7 +18,7 @@
           <el-date-picker v-model="item.value" value-format="yyyy-MM-dd" type="daterange" size="small" range-separator="至" :start-placeholder="item.placeholder1" :end-placeholder="item.placeholder2" />
         </template>
         <template v-else-if="item.type === 'search'">
-          <el-button type="primary" size="small" @click="search">{{ item.name }}</el-button>
+          <el-button type="primary" :icon="item.icon" size="small" @click="search">{{ item.name }}</el-button>
         </template>
         <template v-else-if="item.type === 'reset'">
           <el-button size="small" @click="clickReset">{{ item.name }}</el-button>
@@ -28,10 +28,10 @@
         <div v-show="rightVisible" class="right">
           <div v-for="(item, index) in data[1]" :key="index" class="left">
             <template v-if="item.type === 'add'">
-              <el-button size="small" type="primary" @click="clickAdd">{{ item.name }}</el-button>
+              <el-button size="small" type="primary" :icon="item.icon" @click="clickAdd">{{ item.name }}</el-button>
             </template>
             <template v-if="item.type === 'button'">
-              <el-button size="small" @click="clickBtn(item)">{{ item.name }}</el-button>
+              <el-button size="small" :type="item.keyType" :icon="item.icon" @click="clickBtn(item)">{{ item.name }}</el-button>
             </template>
             <template v-else-if="item.type === 'more'">
               <el-dropdown trigger="click" @command="command">
