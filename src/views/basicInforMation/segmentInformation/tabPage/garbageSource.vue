@@ -1,144 +1,82 @@
 <template>
   <div>
-    <SearchBar
-      ref="SearchBar"
-      :data="searchBarData"
+    <CubeTableRender
+      ref="CubeTableRender"
+      :config="config"
+      :url="url"
+      :method="method"
     />
-    <table-contain :height.sync="table.maxHeight">
-      <el-table
-        slot="table"
-        border
-        :data="table.data"
-        :size="table.size"
-        :height="table.maxHeight-22"
-        style="width: 100%;"
-      >
-        <el-table-column
-          label="序号"
-          width="50"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.$index + 1 }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="code"
-          label="标段编号"
-          align="center"
-        />
-        <el-table-column
-          prop="name"
-          label="标段名称"
-          align="center"
-        />
-        <el-table-column
-          prop="userNature"
-          label="标段路段"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span> {{ scope.row.userNature == 0 ? '后台用户' : '终端用户' }} </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="标段负责人"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag
-              v-if="scope.row.status == 0"
-              size="mini"
-              type="danger"
-            >无效</el-tag>
-            <el-tag
-              v-else
-              size="mini"
-            >有效</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="承包公司"
-          align="center"
-        />
-        <el-table-column
-          label="操作"
-          align="center"
-          width="150"
-        >
-          <template slot-scope="scope">
-            <el-button
-              type="primary"
-              size="mini"
-              @click="handlerClick(1,scope.$index, scope.row)"
-            >编辑</el-button>
-            <el-button
-              type="primary"
-              size="mini"
-              @click="handlerClick(2,scope.$index, scope.row)"
-            >授权</el-button>
-            <el-button
-              type="danger"
-              size="mini"
-              @click="handlerClick(3,scope.$index, scope.row)"
-            >删除</el-button>
-            <el-button
-              v-if="scope.row.status == 0"
-              type="success"
-              size="mini"
-              @click="handlerClick(4, scope.$index, scope.row)"
-            >启用</el-button>
-            <el-button
-              v-if="scope.row.status == 1"
-              type="danger"
-              size="mini"
-              @click="handlerClick(5, scope.$index, scope.row)"
-            >禁用</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <!-- :page-sizes="pagination.pageSizes" -->
-      <el-pagination
-        slot="footer"
-        background
-        :current-page="pagination.page"
-        :page-size="pagination.size"
-        layout="total, prev, pager, next"
-        :total="pagination.total"
-        @current-change="handleCurrentChange"
-      />
-    </table-contain>
   </div>
 </template>
 
 <script>
 
-import listMix from '@/mixProps/listMix'
+import renderTable from '@/mixProps/renderTable'
 export default {
   name: 'People',
-  mixins: [listMix],
+  mixins: [renderTable],
   data() {
     return {
-      searchBarData: [
-        [
-          { type: 'input', value: null, key: 'codeOrName', placeholder: '标段编号、标段名称', class: 'w160' },
-          { type: 'option', value: null, key: 'userNature', placeholder: '请选择企业', options: [
-            { label: '企业A', value: 0 },
-            { label: '企业B', value: 1 }]
-          },
-          { type: 'search', name: '查询', icon: 'el-icon-search' }
-          // { type: 'reset', name: '重置' }
-        ],
-        [
-          { type: 'button', name: '添加', keyType: 'success' },
-          { type: 'button', name: '删除', keyType: 'danger', icon: 'el-icon-close' },
-          { type: 'button', name: '导出', keyType: 'primary', icon: 'el-icon-upload2' },
-          { type: 'button', name: '导入', keyType: 'primary', icon: 'el-icon-download' }
-        ]
-      ]
+      method: 'GET',
+      url: '/car/listCarCurrentStatus',
+      config: {
+        search: {
+          data: [
+            [
+              { type: 'input', value: null, key: 'codeOrName', placeholder: '压缩箱编号', class: 'w160' },
+              { type: 'option', value: null, key: 'userNature', placeholder: '收集点类型', options: [
+                { label: '企业A', value: 0 },
+                { label: '企业B', value: 1 }]
+              },
+              { type: 'search', name: '查询', icon: 'el-icon-search' }
+              // { type: 'reset', name: '重置' }
+            ],
+            [
+              { type: 'button', name: '调入', keyType: 'primary', icon: 'el-icon-upload2' },
+              { type: 'button', name: '调出', keyType: 'danger', icon: 'el-icon-close' },
+              { type: 'button', name: '导出', keyType: 'primary', icon: 'el-icon-upload2' }
+            ]
+          ]
+        },
+        table: {
+          tableHeight: 250,
+          calcTableHeight: true, // 是否开启表格自动高度计算
+          columns: [
+            {
+              label: '序号', // 表格表头名字
+              type: 'selection' // type 一般不需要 仅仅  selection 、 index
+            },
+            {
+              label: '序号', // 表格表头名字
+              type: 'index' // type 一般不需要 仅仅  selection 、 index
+            },
+            {
+              label: '垃圾源头名称',
+              key: 'no'
+            },
+            {
+              label: '源头类型',
+              key: 'clientKey'
+            },
+            {
+              label: '所属办事处',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '地址',
+              key: 'clientKey'
+            }
+          ]
+        }
+      }
     }
   },
   mounted() {

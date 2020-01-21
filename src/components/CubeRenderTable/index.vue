@@ -1,136 +1,88 @@
+
 <template>
-  <div class="CubeTableRender">
-
-    <SearchBar
-      v-if="initConfig.search.data.length"
-      ref="SearchBar"
-      :data="initConfig.search.data"
-      @search="fetchTableData"
-      @reset="fetchTableData"
-      @add="add"
-      @del="del"
-      @command="command"
-    />
-
-    <table-contain
-      v-loading="loading"
-      :height.sync="maxHeight"
+  <div class="CubeRenderTable">
+    <el-table
+      slot="table"
+      :ref="name"
+      class="table-list"
+      style="width: 100%;"
+      :data="tableData"
+      :height="initConfig.table.calcTableHeight ? maxHeight - 16 : initConfig.table.tableHeight "
+      highlight-current-row
+      element-loading-text="数据加载中..."
+      @row-click="clickTableRow"
+      @select="selectRow"
+      @select-all="selectRow"
     >
-      <el-table
-        slot="table"
-        :ref="name"
-        border
-        style="width: 100%;"
-        :data="tableData"
-        :height="initConfig.table.calcTableHeight ? maxHeight - 22 : initConfig.table.tableHeight "
-        highlight-current-row
-        element-loading-text="数据加载中..."
-        @row-click="clickTableRow"
-        @select="selectRow"
-        @select-all="selectRow"
-      >
-        <template v-for="(column, index) in initConfig.table.columns">
-          <!-- 复选框 + 序号 xx -->
-          <!-- 处理 selection 、 index  、 expand 特殊项 -->
-          <template v-if="column.type">
-            <template v-if="column.type==='expand'">
-              <el-table-column
-                v-if="column.type"
-                :key="index"
-                :align="column.align ? column.align : 'center' "
-                :label="column.type === 'index' ? column.label : '' "
-                :type="column.type"
-                :fixed="column.fixed"
-                :width="column.width ? column.width : null "
-              >
-                <template
-                  v-if="column.type==='expand'"
-                  slot-scope="scope"
-                >
-                  <template v-if="column.type==='expand'">
-                    <slot
-                      :item="scope.row"
-                      name="expand"
-                    />
-                  </template>
-                </template>
-              </el-table-column>
-            </template>
-            <template v-else>
-              <el-table-column
-                v-if="column.type"
-                :key="index"
-                :align="column.align ? column.align : 'center' "
-                :label="column.type === 'index' ? column.label : '' "
-                :type="column.type"
-                :fixed="column.fixed"
-                :width="column.width ? column.width : null "
-              />
-            </template>
-          </template>
-
-          <template v-else>
+      <template v-for="(column, index) in initConfig.table.columns">
+        <!-- 处理特殊Type selection 、 index  、 expand 特殊项 -->
+        <template v-if="column.type">
+          <template v-if="column.type==='expand'">
             <el-table-column
+              v-if="column.type"
               :key="index"
               :align="column.align ? column.align : 'center' "
-              :label="column.label"
-              :prop="column.key"
-              :width="column.width"
+              :label="column.type === 'index' ? column.label : '' "
+              :type="column.type"
               :fixed="column.fixed"
-              tooltip-effec="light"
-              :show-overflow-tooltip="!column.tooltip"
-              v-bind="column.attributes"
+              :width="column.width ? column.width : null "
             >
-              <template slot-scope="scope">
-
-                <template v-if="!column.render">
-                  <template>
-                    <span>{{ scope.row[column.key] }}</span>
-                  </template>
-                </template>
-                <template v-else>
-                  <render
-                    :column="column"
-                    :index="index"
-                    :render="column.render"
-                    :row="scope.row"
-                  />
+              <template v-if="column.type==='expand'" slot-scope="scope">
+                <template v-if="column.type==='expand'">
+                  <slot :item="scope.row" name="expand" />
                 </template>
               </template>
-
             </el-table-column>
           </template>
-
+          <template v-else>
+            <el-table-column
+              v-if="column.type"
+              :key="index"
+              :align="column.align ? column.align : 'center' "
+              :label="column.type === 'index' ? column.label : '' "
+              :type="column.type"
+              :fixed="column.fixed"
+              :width="column.width ? column.width : null "
+            />
+          </template>
         </template>
-      </el-table>
-
-      <!-- 分页部分 -->
-      <el-pagination
-        slot="footer"
-        :current-page="pagination.page"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-      <!-- <div v-else slot="footer" style="height: 20px;" /> -->
-    </table-contain>
+        <template v-else>
+          <el-table-column
+            :key="index"
+            :align="column.align ? column.align : 'center' "
+            :label="column.label"
+            :prop="column.key"
+            :width="column.width"
+            :fixed="column.fixed"
+            tooltip-effec="light"
+            :show-overflow-tooltip="!column.tooltip"
+            v-bind="column.attributes"
+          >
+            <template slot-scope="scope">
+              <template v-if="!column.render">
+                <template>
+                  <span>{{ scope.row[column.key] }}</span>
+                </template>
+              </template>
+              <template v-else>
+                <render :column="column" :index="index" :render="column.render" :row="scope.row" />
+              </template>
+            </template>
+          </el-table-column>
+        </template>
+      </template>
+    </el-table>
   </div>
 </template>
 
 <script>
 
 import request from '../../utils/request'
-import { SearchBar, TableContain } from '../../components'
 import { deepMerge, deepClone } from '../../utils'
 
 export default {
-  name: 'CubeTableRender',
+  name: 'CubeRenderTable',
   components: {
-    SearchBar,
-    TableContain,
     render: {
       functional: true,
       props: {
@@ -155,7 +107,7 @@ export default {
   props: {
     extraParam: {
       type: Object,
-      default: () => { }
+      default: () => {}
     },
     url: {
       type: String,
@@ -175,7 +127,6 @@ export default {
   data() {
     return {
       name: 'CubeTable',
-      // 默认QWER列表配置
       initConfig: {
         search: {
           data: []
@@ -289,4 +240,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>
