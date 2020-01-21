@@ -1,11 +1,9 @@
 <template>
-  <div class="LeftContainer">
-
+  <div>
     <SearchBar
       ref="SearchBar"
       :data="searchBarData"
     />
-
     <table-contain :height.sync="table.maxHeight">
       <el-table
         slot="table"
@@ -114,14 +112,13 @@
       />
     </table-contain>
   </div>
-
 </template>
 
 <script>
 
 import listMix from '@/mixProps/listMix'
 export default {
-  name: 'LeftContainer',
+  name: 'People',
   mixins: [listMix],
   data() {
     return {
@@ -144,7 +141,13 @@ export default {
       ]
     }
   },
+  mounted() {
+    console.log('People')
+  },
   methods: {
+    handleClick(tab, event) {
+      console.log(tab, event, 'sb')
+    },
     fetchTableData() {
       if (this.$refs['SearchBar']) {
         // 触发组件搜索回调参数请求接口
@@ -197,8 +200,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.LeftContainer {
-  padding:0 10px;
-  border: 1px solid #dfe6ec;
-}
+
 </style>
+
