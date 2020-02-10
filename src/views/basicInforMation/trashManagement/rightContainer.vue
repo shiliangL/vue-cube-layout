@@ -1,5 +1,5 @@
 <template>
-  <div class="LeftContainer">
+  <div>
 
     <CubeTableRender
       ref="CubeTableRender"
@@ -35,7 +35,6 @@
 import renderTable from '@/mixProps/renderTable'
 
 export default {
-  name: 'LeftContainer',
   mixins: [renderTable],
   data() {
     return {
@@ -182,8 +181,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.LeftContainer {
-  padding:0 10px;
-  border: 1px solid #dfe6ec;
-}
+
 </style>

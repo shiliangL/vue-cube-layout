@@ -211,7 +211,7 @@ export default {
         // 配置合并后做请求
         this.$nextTick(() => {
           setTimeout(() => {
-            this.fetchList()
+            // this.fetchList()
           }, 20)
         })
       }

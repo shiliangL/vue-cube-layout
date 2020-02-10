@@ -14,6 +14,8 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import './components/global.js' // 使用自定义全局组件
+
 import './icons' // icon
 // import './permission' // permission control
 

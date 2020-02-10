@@ -30,16 +30,6 @@ export default {
     propsData: {
       type: Object,
       default: () => { }
-    },
-    clearMap: {
-      type: Boolean,
-      default: true
-    },
-    mapType: {
-      type: Array,
-      default() {
-        return [3]
-      }
     }
   },
   data() {
