@@ -2,8 +2,8 @@
 <template>
   <split-pane
     split="vertical"
-    :min-percent="20"
-    :default-percent="20"
+    :min-percent="0"
+    :default-percent="0"
   >
     <template slot="paneL">
       <BasicTab class="split-containerBox" @clickRow="clickTabRow" />
@@ -23,7 +23,7 @@ import BasicTab from '@/publicView/basicTab'
 import RightContainer from './rightContainer'
 
 export default {
-  name: 'GarbageCollection',
+  name: 'VehicleMaintenance',
   components: {
     splitPane,
     BasicTab,
