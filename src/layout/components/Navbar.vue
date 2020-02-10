@@ -6,13 +6,7 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-
-        <LinkList class="right-menu-item" />
-
-        <search id="header-search" class="right-menu-item" />
-
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
-
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -42,16 +36,12 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
-import Search from '@/components/HeaderSearch'
-import LinkList from './LinkList'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    LinkList,
-    Screenfull,
-    Search
+    Screenfull
   },
   computed: {
     ...mapGetters([

@@ -66,9 +66,9 @@ export const asyncRoutes = [
         meta: { title: '人员基本管理', icon: 'example' }
       },
       {
-        path: 'vehiclesManagement',
-        component: () => import('../views/basicInforMation/vehiclesManagement'),
-        name: 'vehiclesManagement',
+        path: 'carManagement',
+        component: () => import('../views/basicInforMation/carManagement'),
+        name: 'carManagement',
         meta: { title: '车辆基本管理', icon: 'example' }
       },
       {
@@ -96,9 +96,9 @@ export const asyncRoutes = [
         meta: { title: '智能硬件管理', icon: 'example' }
       },
       {
-        path: 'vehicleMaintenance',
-        component: () => import('../views/basicInforMation/vehicleMaintenance'),
-        name: 'vehicleMaintenance',
+        path: 'vehiclesManagement',
+        component: () => import('../views/basicInforMation/vehiclesManagement'),
+        name: 'vehiclesManagement',
         meta: { title: '车辆维护单位管理', icon: 'example' }
       },
       {

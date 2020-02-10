@@ -196,7 +196,7 @@ export default {
         currentPage: 1, // 当前默认第一页
         total: 0 // 总条数
       },
-      tableData: [],
+      tableData: [{}],
       multipleSelection: []
     }
   },

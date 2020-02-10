@@ -330,6 +330,19 @@ background: #dfe6ec!important;
   flex-direction: column;
 }
 
+//表格处理栏 操作栏
+.flex-box-table-row{
+  display: flex;
+  justify-content: space-around;
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.danger-text{
+  color: #f56c6c;
+}
+
+
 // 表单预览基本
 .form-item-row{
   display: flex;

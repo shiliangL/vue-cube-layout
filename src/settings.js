@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'NEXT ADMIN',
+  title: '智慧环卫系统',
 
   /**
    * @type {boolean} true | false

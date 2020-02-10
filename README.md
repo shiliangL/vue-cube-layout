@@ -8,7 +8,7 @@
  - 标段信息管理 segmentInformation
  - 合同信息管理 contractInformation
  - 人员基本信息 peopleInformation
- - 车辆基本管理 vehiclesManagement
+ - 车辆基本管理 carManagement
  - 垃圾桶管理   trashManagement
  - 垃圾收集点管理 garbageCollection
  - 垃圾源头管理   wasteSource

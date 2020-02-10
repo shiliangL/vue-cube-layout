@@ -73,31 +73,23 @@ export default {
               type: 'index' // type 一般不需要 仅仅  selection 、 index
             },
             {
-              label: '标段编号',
+              label: '设备编号',
               key: 'no'
             },
             {
-              label: '标段名称',
+              label: 'SIM卡号',
               key: 'clientKey'
             },
             {
-              label: '标段路段',
+              label: '设备类型',
               key: 'sectionName'
             },
             {
-              label: '标段负责人',
-              key: 'onlineType',
-              render: (h, parmas) => {
-                const typeMap = {
-                  0: '离线',
-                  1: '在线'
-                }
-                const { row } = parmas
-                return <span> {typeMap[row.onlineType]} </span>
-              }
+              label: '设备状态',
+              key: 'sectionName'
             },
             {
-              label: '承包公司',
+              label: '使用人/车',
               key: 'onguardType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -109,15 +101,36 @@ export default {
               }
             },
             {
+              label: '最后通讯时间',
+              key: 'sectionName'
+            },
+            {
+              label: '所属企业',
+              key: 'sectionName'
+            },
+            {
+              label: '所属标段',
+              key: 'sectionName'
+            },
+            {
+              label: '套餐到期时间',
+              key: 'sectionName'
+            },
+            {
               label: '操作',
               key: '',
-              width: '140px',
               render: (h, parmas) => {
-                const { row } = parmas
+                // const { row } = parmas
                 return (
-                  <div class='flex-box'>
-                    <el-link type='primary' onClick={() => this.handlerType(0, row)}>车辆定位</el-link>
-                    <el-link type='primary' onClick={() => this.handlerType(1, row)}>通讯记录</el-link>
+                  <div class='flex-box-table-row'>
+                    <div class='ac'>
+                      <i class='el-icon-edit-outline ac'> </i>
+                      编辑
+                    </div>
+                    <div class='danger-text ac'>
+                      <i class='el-icon-document-delete ac'> </i>
+                      删除
+                    </div>
                   </div>
                 )
               }

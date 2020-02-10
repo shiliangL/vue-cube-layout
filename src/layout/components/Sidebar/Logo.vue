@@ -5,15 +5,15 @@
       <div v-if="collapse" class="sidebar-logo-item">
         <a v-if="logo" key="collapse" class="sidebar-logo-link" to="/">
           <!-- <svg-icon class="sidebar-logo" icon-class="cube-logo" /> -->
-          <h1 class="sidebar-title">{{ title }}</h1>
+          <span class="sidebar-title">智</span>
         </a>
       </div>
       <!-- //展开 -->
       <div v-else class="sidebar-logo-item">
-        <a v-if="logo" key="expand" class="sidebar-logo-link" to="/">
+        <!-- <a v-if="logo" key="expand" class="sidebar-logo-link" to="/">
           <svg-icon class="sidebar-logo" icon-class="cube-logo" @mousemove="mousemove" @click.native="clickLogo" />
-        </a>
-        <h1 class="sidebar-title">{{ title }}</h1>
+        </a> -->
+        <span class="sidebar-title">{{ title }}</span>
       </div>
     </transition>
   </div>
@@ -71,17 +71,11 @@ export default {
 
   .sidebar-logo-item {
     padding: 0 20px;
-    display: flex;
-    align-items: center;
-    a {
-      width: 64px !important;
-    }
-
+    text-align: center;
     .sidebar-logo-link {
       display: flex;
       justify-content: space-around;
       align-items: center;
-
       .sidebar-logo {
         width: 32px;
         height: 32px;
@@ -95,7 +89,7 @@ export default {
       margin: 0;
       color: #ffffff;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 16px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }

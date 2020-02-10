@@ -1,7 +1,7 @@
 <template>
   <div :class="{'has-logo':showLogo}">
 
-    <CubeCloudBar :visible.sync="cubeCloudBarVisible" />
+    <CubeCloudBar v-if="false" :visible.sync="cubeCloudBarVisible" />
 
     <logo v-if="showLogo" :collapse="isCollapse" @clickLogo="clickLogo" />
 

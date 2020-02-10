@@ -73,19 +73,23 @@ export default {
               type: 'index' // type 一般不需要 仅仅  selection 、 index
             },
             {
-              label: '标段编号',
+              label: '收集点名称',
               key: 'no'
             },
             {
-              label: '标段名称',
+              label: '大类',
               key: 'clientKey'
             },
             {
-              label: '标段路段',
+              label: '小类',
               key: 'sectionName'
             },
             {
-              label: '标段负责人',
+              label: '具体归属',
+              key: 'sectionName'
+            },
+            {
+              label: '放置桶数',
               key: 'onlineType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -97,7 +101,7 @@ export default {
               }
             },
             {
-              label: '承包公司',
+              label: '所属企业',
               key: 'onguardType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -109,15 +113,28 @@ export default {
               }
             },
             {
+              label: '所属标段',
+              key: 'sectionName'
+            },
+            {
+              label: '桶点位置描述',
+              key: 'sectionName'
+            },
+            {
               label: '操作',
               key: '',
-              width: '140px',
               render: (h, parmas) => {
-                const { row } = parmas
+                // const { row } = parmas
                 return (
-                  <div class='flex-box'>
-                    <el-link type='primary' onClick={() => this.handlerType(0, row)}>车辆定位</el-link>
-                    <el-link type='primary' onClick={() => this.handlerType(1, row)}>通讯记录</el-link>
+                  <div class='flex-box-table-row'>
+                    <div class='ac'>
+                      <i class='el-icon-edit-outline ac'> </i>
+                      编辑
+                    </div>
+                    <div class='danger-text ac'>
+                      <i class='el-icon-document-delete ac'> </i>
+                      删除
+                    </div>
                   </div>
                 )
               }

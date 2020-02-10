@@ -73,19 +73,19 @@ export default {
               type: 'index' // type 一般不需要 仅仅  selection 、 index
             },
             {
-              label: '标段编号',
+              label: '车牌号',
               key: 'no'
             },
             {
-              label: '标段名称',
+              label: '车载设备号',
               key: 'clientKey'
             },
             {
-              label: '标段路段',
+              label: '车辆类型',
               key: 'sectionName'
             },
             {
-              label: '标段负责人',
+              label: '动力类型',
               key: 'onlineType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -97,7 +97,67 @@ export default {
               }
             },
             {
-              label: '承包公司',
+              label: '权属类型',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '所属企业',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '所属标段',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '参保期限',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '年检到期时间',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '工作状态',
               key: 'onguardType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -111,13 +171,18 @@ export default {
             {
               label: '操作',
               key: '',
-              width: '140px',
               render: (h, parmas) => {
-                const { row } = parmas
+                // const { row } = parmas
                 return (
-                  <div class='flex-box'>
-                    <el-link type='primary' onClick={() => this.handlerType(0, row)}>车辆定位</el-link>
-                    <el-link type='primary' onClick={() => this.handlerType(1, row)}>通讯记录</el-link>
+                  <div class='flex-box-table-row'>
+                    <div class='ac'>
+                      <i class='el-icon-edit-outline ac'> </i>
+                      编辑
+                    </div>
+                    <div class='danger-text ac'>
+                      <i class='el-icon-document-delete ac'> </i>
+                      删除
+                    </div>
                   </div>
                 )
               }

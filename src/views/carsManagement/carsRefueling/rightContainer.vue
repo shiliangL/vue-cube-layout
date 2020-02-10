@@ -73,19 +73,19 @@ export default {
               type: 'index' // type 一般不需要 仅仅  selection 、 index
             },
             {
-              label: '标段编号',
+              label: '车牌号',
               key: 'no'
             },
             {
-              label: '标段名称',
+              label: '车辆类型',
               key: 'clientKey'
             },
             {
-              label: '标段路段',
+              label: '关联司机',
               key: 'sectionName'
             },
             {
-              label: '标段负责人',
+              label: '动力类型',
               key: 'onlineType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -97,7 +97,55 @@ export default {
               }
             },
             {
-              label: '承包公司',
+              label: '油号',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '加油金额(元)',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '公里数',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '备注',
+              key: 'onguardType',
+              render: (h, parmas) => {
+                const typeMap = {
+                  0: '不在岗',
+                  1: '在岗'
+                }
+                const { row } = parmas
+                return <span> {typeMap[row.onguardType]} </span>
+              }
+            },
+            {
+              label: '附件',
               key: 'onguardType',
               render: (h, parmas) => {
                 const typeMap = {
@@ -111,13 +159,18 @@ export default {
             {
               label: '操作',
               key: '',
-              width: '140px',
               render: (h, parmas) => {
-                const { row } = parmas
+                // const { row } = parmas
                 return (
-                  <div class='flex-box'>
-                    <el-link type='primary' onClick={() => this.handlerType(0, row)}>车辆定位</el-link>
-                    <el-link type='primary' onClick={() => this.handlerType(1, row)}>通讯记录</el-link>
+                  <div class='flex-box-table-row'>
+                    <div class='ac'>
+                      <i class='el-icon-edit-outline ac'> </i>
+                      编辑
+                    </div>
+                    <div class='danger-text ac'>
+                      <i class='el-icon-document-delete ac'> </i>
+                      删除
+                    </div>
                   </div>
                 )
               }
