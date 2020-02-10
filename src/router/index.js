@@ -110,6 +110,30 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/mechanicalWork',
+    component: Layout,
+    redirect: '/mechanicalWork/carsMaintenance',
+    name: 'mechanicalWork',
+    meta: {
+      title: '机械作业管理',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'JobRoad',
+        component: () => import('../views/mechanicalWork/JobRoad'),
+        name: 'JobRoad',
+        meta: { title: '作业道路管理', icon: 'example' }
+      },
+      {
+        path: 'JobMachine',
+        component: () => import('../views/mechanicalWork/JobMachine'),
+        name: 'JobMachine',
+        meta: { title: '机械作业情况', icon: 'example' }
+      }
+    ]
+  },
+  {
     path: '/carsManagement',
     component: Layout,
     redirect: '/carsManagement/carsMaintenance',
@@ -291,20 +315,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/cubeLayout',
-    component: Layout,
-    redirect: '/cubeLayout',
-    children: [
-      {
-        path: 'cubeLayout',
-        component: () => import('@/views/cubeLayout/index'),
-        name: 'cubeLayout',
-        meta: { title: 'cubeLayout', icon: 'component', affix: true }
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -317,7 +328,7 @@ export const constantRoutes = [
         path: 'oneMap',
         component: () => import('@/views/oneMap/index'),
         name: 'oneMap',
-        meta: { title: 'oneMap', icon: 'component', affix: true }
+        meta: { title: '环卫一张图', icon: 'component', affix: true }
       }
     ]
   },

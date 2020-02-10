@@ -1,5 +1,7 @@
 <template>
-  <div />
+  <div>
+    环卫一张图
+  </div>
 </template>
 
 <script>

@@ -23,7 +23,7 @@ import BasicTab from '@/publicView/basicTab'
 import RightContainer from './rightContainer'
 
 export default {
-  name: 'CarsMaintenance',
+  name: 'JobRoad',
   components: {
     splitPane,
     BasicTab,
