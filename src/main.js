@@ -17,7 +17,7 @@ import router from './router'
 import './components/global.js' // 使用自定义全局组件
 
 import './icons' // icon
-// import './permission' // permission control
+import './permission' // permission control
 
 import * as filters from './filters' // global filters
 

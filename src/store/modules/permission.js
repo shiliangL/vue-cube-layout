@@ -58,6 +58,13 @@ const actions = {
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
+  },
+  generateRoutesMix({ commit }, roles) {
+    return new Promise(resolve => {
+      // TODO 这里是有坑的
+      commit('SET_ROUTES', asyncRoutes)
+      resolve(asyncRoutes)
+    })
   }
 }
 

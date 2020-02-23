@@ -1,5 +1,5 @@
 // import { login, logout, getInfo } from '@/api/user'
-import { login, getInfo } from '@/api/user'
+// import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -32,46 +32,58 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    // const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ loginName: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.access_token)
-        setToken(data.access_token)
+      setTimeout(() => {
+        // 模拟请求
+        commit('SET_TOKEN', 'xsdaslkadskkdaskdsakds')
+        setToken('xsdaslkadskkdaskdsakds')
         resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      }, 2000)
+      // login({ loginName: username.trim(), password: password }).then(response => {
+      //   const { data } = response
+      //   commit('SET_TOKEN', data.access_token)
+      //   setToken(data.access_token)
+      //   resolve()
+      // }).catch(error => {
+      //   reject(error)
+      // })
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        // const { roles, name, avatar, introduction } = data
-        const { name, avatar, introduction } = data
-
+      setTimeout(() => {
+        // 模拟请求
         const roles = ['admin']
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
         commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+        commit('SET_NAME', 'ShiliangL')
+        commit('SET_AVATAR', '')
+        commit('SET_INTRODUCTION', '基本介绍')
+        resolve({ roles: roles })
+      }, 2000)
+
+      // getInfo(state.token).then(response => {
+      //   const { data } = response
+      //   if (!data) {
+      //     reject('Verification failed, please Login again.')
+      //   }
+      //   // const { roles, name, avatar, introduction } = data
+      //   const { name, avatar, introduction } = data
+      //   const roles = ['admin']
+      //   // roles must be a non-empty array
+      //   if (!roles || roles.length <= 0) {
+      //     reject('getInfo: roles must be a non-null array!')
+      //   }
+      //   commit('SET_ROLES', roles)
+      //   commit('SET_NAME', name)
+      //   commit('SET_AVATAR', avatar)
+      //   commit('SET_INTRODUCTION', introduction)
+      //   resolve(data)
+      // }).catch(error => {
+      //   reject(error)
+      // })
     })
   },
 

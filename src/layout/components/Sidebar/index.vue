@@ -17,7 +17,7 @@
         mode="vertical"
       >
         <sidebar-item
-          v-for="route in constantRoutes"
+          v-for="route in permission_routes"
           :key="route.path"
           :item="route"
           :base-path="route.path"

@@ -38,6 +38,56 @@ import Layout from '@/layout'
  */
 export const asyncRoutes = [
   {
+    path: '/dashboard',
+    component: Layout,
+    redirect: '/dashboard/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: '首页', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/oneMap',
+    component: Layout,
+    redirect: '/oneMap/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/oneMap/index'),
+        name: 'oneMap',
+        meta: { title: '环卫一张图', icon: 'component', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/qwerComponentDemo',
+    component: Layout,
+    redirect: 'cubeTableRender',
+    name: 'qwerComponentDemo',
+    meta: {
+      title: '业务组件',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: 'cubeTableRender',
+        component: () => import('@/views/cubeTableRender/index'),
+        name: 'cubeTableRender',
+        meta: { title: '业务列表表格', icon: 'component', affix: true }
+      },
+      {
+        path: 'cubeButton',
+        component: () => import('@/views/cubeButton/index'),
+        name: 'cubeButton',
+        meta: { title: '特效按钮', icon: 'component', affix: true }
+      }
+    ]
+  },
+  {
     path: '/basicManagement',
     component: Layout,
     redirect: '/basicManagement/segmentInformation',
@@ -269,12 +319,40 @@ export const asyncRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+export const asyncRoutesB = [
+  {
+    path: '/oneMap',
+    component: Layout,
+    // redirect: '/oneMap/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/oneMap/index'),
+        name: 'oneMap',
+        meta: { title: '环卫一张图', icon: 'component', affix: true }
+      }
+    ]
+  }
+]
 /**
  * constantRoutes
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
 export const constantRoutes = [
+  {
+    path: '/',
+    component: Layout,
+    // redirect: '/dashboard',
+    children: [
+      // {
+      //   path: 'dashboard',
+      //   component: () => import('@/views/dashboard/index'),
+      //   name: 'Dashboard',
+      //   meta: { title: '首页', icon: 'dashboard', affix: true }
+      // }
+    ]
+  },
   {
     path: '/redirect',
     component: Layout,
@@ -305,58 +383,8 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/oneMap',
-    component: Layout,
-    redirect: '/oneMap',
-    children: [
-      {
-        path: 'oneMap',
-        component: () => import('@/views/oneMap/index'),
-        name: 'oneMap',
-        meta: { title: '环卫一张图', icon: 'component', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/qwerComponentDemo',
-    component: Layout,
-    redirect: 'cubeTableRender',
-    name: 'qwerComponentDemo',
-    meta: {
-      title: '业务组件',
-      icon: 'component'
-    },
-    children: [
-      {
-        path: 'cubeTableRender',
-        component: () => import('@/views/cubeTableRender/index'),
-        name: 'cubeTableRender',
-        meta: { title: '业务列表表格', icon: 'component', affix: true }
-      },
-      {
-        path: 'cubeButton',
-        component: () => import('@/views/cubeButton/index'),
-        name: 'cubeButton',
-        meta: { title: '特效按钮', icon: 'component', affix: true }
-      }
-    ]
-  },
-  ...asyncRoutes
+  }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
