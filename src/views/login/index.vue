@@ -209,8 +209,9 @@ $light_gray: #eee;
   background-color: $bg;
   overflow: hidden;
   position: relative;
-  background-size: cover;
   background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 
   .login-form {
     position: absolute;
@@ -251,9 +252,9 @@ $light_gray: #eee;
   .title-container {
     position: relative;
     .title {
-      font-size: 23px;
+      font-weight: normal;
+      font-size: 22px;
       color: #2593FC;
-      margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
     }

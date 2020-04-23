@@ -21,6 +21,8 @@ import * as filters from './filters' // global filters
 
 import importDirective from '@/directive'
 
+import { guid_dev } from '@/utils'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -50,13 +52,14 @@ Vue.config.productionTip = false
 
 // 原型方法添加
 import ScrollIntoView from '@/plugins/scroll-into-view'
-import autosize from '@/plugins/autosize'
 Vue.prototype.$ScrollIntoView = ScrollIntoView
-Vue.prototype.$autosize = autosize
+Vue.prototype.$guid_dev = guid_dev
 
 // 其他包使用
-// import VueScrollTo from 'vue-scrollto'
-// Vue.use(VueScrollTo)
+import BaiduMap from '@/Bmap'
+Vue.use(BaiduMap, {
+  ak: 'ggeG9Ii3jcwnXUvVXNQ6vjRYUXV5Ckhz'
+})
 
 new Vue({
   el: '#app',

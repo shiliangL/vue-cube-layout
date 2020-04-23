@@ -1,6 +1,18 @@
 <template>
-  <div class="dashboard-container">
-    <component :is="currentRole" v-if="false" />
+  <div class="dashboard">
+
+    <CubeMap class="CubeMap" :marker-list="markerList">
+      <template slot="bm-overlay">
+        <bm-view :style="{height:'calc(100% - 20px)'}" />
+        <div class="text-box">
+          <p style="padding: 0 10px;">以下是使用 `bm-view` 组件渲染的百度地图实例</p>
+        </div>
+      </template>
+    </CubeMap>
+    <component
+      :is="currentRole"
+      v-if="false"
+    />
   </div>
 </template>
 
@@ -8,14 +20,39 @@
 import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
 import editorDashboard from './editor'
+import CubeMap from '@/components/CubeMap'
 
 export default {
   name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
+  components: {
+    CubeMap,
+    adminDashboard,
+    editorDashboard
+  },
   data() {
     return {
       autosize: '',
-      currentRole: 'adminDashboard'
+      currentRole: 'adminDashboard',
+      markerList: [
+        {
+          type: 'peopleOverLay',
+          overlays: [
+            {
+              'iconType': 2,
+              'id': 'FC75B196-01CB-43C2-82E4-977DB8953703',
+              'lat': 22.642504411498177,
+              'lng': 113.84449905288676,
+              'name': '粤BGL503',
+              'sectionId': 'A89B561C-7E88-4770-9243-1961FAFFBDA6',
+              'type': 1,
+              'typeName': '高压清洗车'
+            }
+          ],
+          labels: [],
+          show: true,
+          showLabels: false
+        }
+      ]
     }
   },
   computed: {
@@ -30,3 +67,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.dashboard {
+  width: 100%;
+  height: 500px;
+}
+.CubeMap{
+  margin-top: 10px;
+}
+</style>
