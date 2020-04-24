@@ -1,6 +1,6 @@
 <template>
   <baidu-map
-    class="map"
+    class="baidu-map"
     style="width: 100%; height:100%;"
     :center="centerName"
     :map-click="mapClick"
@@ -9,6 +9,10 @@
     <!-- 省市区边界 -->
     <bm-boundary v-if="showBoundary" :name="centerName" :stroke-weight="2" fill-color="" stroke-color="red" @loaded="boundaryLoaded" />
 
+    <!-- 地图控件 轨迹回放-->
+    <MapGpsTracePlay v-if="showMapGpsTracePlay" />
+
+    <!-- 覆盖物 -->
     <template v-if="map">
       <template v-for="item in markerList">
         <template v-show="item.show">
@@ -106,8 +110,13 @@
 // BMAP_ANCHOR_BOTTOM_LEFT	控件将定位到地图的左下角
 // BMAP_ANCHOR_BOTTOM_RIGHT	控件将定位到地图的右下角
 
+import MapGpsTracePlay from './mapGpsTracePlay'
+
 export default {
   name: 'CubeMap',
+  components: {
+    MapGpsTracePlay
+  },
   props: {
     centerName: {
       type: String,
@@ -118,6 +127,10 @@ export default {
       default: () => 'BMAP_ANCHOR_TOP_RIGHT'
     },
     showBoundary: {
+      type: Boolean,
+      default: () => true
+    },
+    showMapGpsTracePlay: {
       type: Boolean,
       default: () => true
     },

@@ -1,9 +1,9 @@
 <template>
   <div class="dashboard">
 
-    <CubeMap class="CubeMap" :marker-list="markerList">
+    <CubeMap class="cubeMap" :marker-list="markerList">
       <template slot="bm-overlay">
-        <bm-view :style="{height:'calc(100% - 20px)'}" />
+        <!-- <bm-view :style="{height:'calc(100% - 40px)'}" /> -->
         <div class="text-box">
           <p style="padding: 0 10px;">以下是使用 `bm-view` 组件渲染的百度地图实例</p>
         </div>
@@ -71,9 +71,9 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
   width: 100%;
-  height: 500px;
+  height: calc(100vh - 100px);
 }
-.CubeMap{
+.cubeMap{
   margin-top: 10px;
 }
 </style>

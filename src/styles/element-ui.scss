@@ -82,3 +82,11 @@
 .el-range-separator {
   box-sizing: content-box;
 }
+
+.el-message-box__wrapper{
+  z-index: 99999999999999!important;;
+}
+
+.el-message{
+  z-index: 99999999999999!important;;
+}

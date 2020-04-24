@@ -189,3 +189,14 @@ aside {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+// w80 - w470
+@function indexName($args) { 
+  @return $args * 10 + 70; 
+}
+
+@for $i from 1 through 40 {
+  .w#{indexName($i)} {
+      width: #{indexName($i)} + 'px'
+  }
+}

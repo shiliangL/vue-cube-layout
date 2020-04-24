@@ -62,6 +62,24 @@
         </div>
       </el-form-item>
 
+      <el-form-item
+        prop="captcha"
+        :rules="[{ required: true, message: '验证码不能为空'}]"
+      >
+        <div class="flex-box">
+          <el-input
+            v-model="loginForm.captcha"
+            placeholder="验证码"
+          />
+
+          <img
+            :src="keyCodeImg"
+            alt=""
+            @click.stop="getCaptcha"
+          >
+        </div>
+      </el-form-item>
+
       <el-button
         :loading="loading"
         type="primary"
@@ -80,8 +98,10 @@
 
 <script>
 
+import { getCaptcha } from '@/api/user'
 import { validUsername } from '@/utils/validate'
 const backgroundImage = 'https://img.alicdn.com/tfs/TB1zsNhXTtYBeNjy1XdXXXXyVXa-2252-1500.png'
+import dayjs from 'dayjs'
 
 export default {
   name: 'Login',
@@ -101,10 +121,12 @@ export default {
       }
     }
     return {
+      keyCodeImg: null,
       backgroundImage,
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '123456',
+        captcha: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -123,7 +145,16 @@ export default {
       immediate: true
     }
   },
+  mounted() {
+    this.getCaptcha()
+  },
   methods: {
+    getCaptcha() {
+      getCaptcha({ t: dayjs().valueOf() }).then(({ data }) => {
+        this.keyCodeImg = data.data.base64
+        this.loginForm.captcha = data.data.code
+      })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -139,7 +170,7 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            this.$router.push({ path: '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false

@@ -1,43 +1,118 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, logout, getInfo, checkToken } from '@/api/user'
+import { getToken, setToken, removeToken, setTokenR, getRefreshToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  refresh_token: getRefreshToken(),
   name: '',
-  avatar: 'https://avatars2.githubusercontent.com/u/24687496?s=460&u=4fe968264aaa4f5ef5c9e80fb427998dad7d1244&v=4',
+  avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  appSettings: [],
+  isAdmin: false,
+  perms: [],
+  userInfo: {
+    deptType: null,
+    info: {},
+    permissions: []
+  },
+  userInfoCollection: {}
 }
 
 const mutations = {
+  // SET_TOKEN: (state, token) => {
+  //   state.token = token
+  // },
   SET_TOKEN: (state, token) => {
     state.token = token
+    setToken(token)
+  },
+  SET_REFRESH_TOKEN: (state, refresh_token) => {
+    state.refresh_token = refresh_token
+    setTokenR(refresh_token)
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_USERINFO_COLLECTION: (state, value = {}) => {
+    state.userInfoCollection = Object.assign(state.userInfoCollection, value)
+  },
+  SET_NAME: (state, user) => {
+    state.name = user.userName
+    state.isAdmin = user.userIsAdmin === 1
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_APP_SETTINGS: (state, appSettings) => {
+    state.appSettings = appSettings
+  },
+  SET_Perms(state, perms) { // 用户权限标识集合
+    state.perms = perms
+  },
+  SET_ALL_INFO: (state, value) => {
+    state.userInfo = Object.assign(state.userInfo, value)
   }
 }
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, captcha } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+      login({ loginName: username.trim(), password: password, captcha: captcha }).then(response => {
+        // const { data } = response.data
+        // commit('SET_TOKEN', data.access_token)
+        // setToken(data.access_token)
+        // resolve()
+        const { data, success, msg } = response.data
+        const { access_token, refresh_token } = data
+        if (success) {
+          // --- vuex ---
+          commit('SET_TOKEN', access_token)
+          commit('SET_REFRESH_TOKEN', refresh_token)
+          // --- Cookies ---
+          // setToken(access_token)
+          // setTokenR(refresh_token)
+          resolve()
+        } else {
+          reject({ success, data, msg })
+        }
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // checkToken for login 验证成功之后应该走获取用户信息
+  // {
+  //   "expireSecond": 0,
+  //   "refresh_token": "string",
+  //   "token": "string"
+  // }
+  checkToken({ commit, state }, params) {
+    return new Promise((resolve, reject) => {
+      checkToken(params).then(response => {
+        // 下面是正常数据结构
+        const { data, success, msg } = response.data
+        const { access_token, refresh_token } = data
+        if (success) {
+          // --- vuex ---
+          commit('SET_TOKEN', access_token)
+          commit('SET_REFRESH_TOKEN', refresh_token)
+          // --- Cookies ---
+          // setToken(access_token)
+          // setTokenR(refresh_token)
+          setTimeout(() => {
+            resolve(response.data)
+          }, 200)
+        } else {
+          reject({ success, data, msg })
+        }
       }).catch(error => {
         reject(error)
       })
@@ -49,22 +124,22 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
+        if (!data.data) {
+          reject('登录超时,请重新登录!')
         }
+        const result = data.data
+        const { info, perms } = data.data
+        commit('SET_ALL_INFO', data.data)
+        commit('SET_NAME', info)
+        commit('SET_NAME', info)
+        commit('SET_Perms', perms)
 
-        const { roles, name, introduction } = data
-
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+        const infoParams = result.info ? result.info : {}
+        const params = {
+          ...infoParams,
+          permissions: result.permissions
         }
-
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        // commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
+        commit('SET_USERINFO_COLLECTION', params)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -77,7 +152,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
+        commit('SET_NAME', '')
+        commit('SET_Perms', [])
         removeToken()
         resetRouter()
 
@@ -91,7 +167,15 @@ const actions = {
       })
     })
   },
-
+  FedLogOut({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_TOKEN', '')
+      commit('SET_NAME', '')
+      removeToken()
+      resetRouter()
+      resolve()
+    })
+  },
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
