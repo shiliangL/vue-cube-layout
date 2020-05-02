@@ -1,12 +1,13 @@
 <template>
   <div class="tab-container">
+    {{ height }}
     <el-tag>mounted times ：{{ createdTimes }}</el-tag>
     <el-alert :closable="false" style="width:200px;display:inline-block;vertical-align: middle;margin-left:30px;" title="Tab with keep-alive" type="success" />
     <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
       <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.key">
-        <keep-alive>
-          <tab-pane v-if="activeName==item.key" :type="item.key" @create="showCreatedTimes" />
-        </keep-alive>
+        <Max-Height v-model="height">
+          <tab-pane v-if="activeName==item.key" :height="height-220" :type="item.key" @create="showCreatedTimes" />
+        </Max-Height>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -20,6 +21,7 @@ export default {
   components: { TabPane },
   data() {
     return {
+      height: 0,
       tabMapOptions: [
         { label: 'China', key: 'CN' },
         { label: 'USA', key: 'US' },
@@ -28,11 +30,6 @@ export default {
       ],
       activeName: 'CN',
       createdTimes: 0
-    }
-  },
-  watch: {
-    activeName(val) {
-      this.$router.push(`${this.$route.path}?tab=${val}`)
     }
   },
   created() {

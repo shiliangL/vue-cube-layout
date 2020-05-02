@@ -1,6 +1,6 @@
 build/*.js
 src/assets
 src/Bmap
+src/vmap
 public
 dist
-

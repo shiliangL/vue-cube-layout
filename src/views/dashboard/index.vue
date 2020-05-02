@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
 
-    <CubeMap class="cubeMap" :marker-list="markerList">
+    <CubeMap class="cubeMap" :marker-list="markerList" @mapReady="mapReady" @markerClick="markerClick">
       <template slot="bm-overlay">
         <!-- <bm-view :style="{height:'calc(100% - 40px)'}" /> -->
         <div class="text-box">
@@ -21,6 +21,8 @@ import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
 import editorDashboard from './editor'
 import CubeMap from '@/components/CubeMap'
+import points from './json/area.json'
+import { on } from '@/utils/tools'
 
 export default {
   name: 'Dashboard',
@@ -61,8 +63,33 @@ export default {
     ])
   },
   created() {
+    // console.log(process.env, 'dev')
     if (!this.roles.includes('admin')) {
       this.currentRole = 'editorDashboard'
+    }
+  },
+  methods: {
+    mapReady(map, BMap) {
+      this.map = map
+    },
+    markerClick(e, t, m) {
+      console.log(e, t, m)
+      this.map && this.map.removeOverlay(this.polygon)
+      const pointList = []
+      const profilePoints = points.data.profilePoints[0]
+      for (const item of profilePoints) {
+        pointList.push(new BMap.Point(item.lng, item.lat))
+      }
+      this.polygon = new BMap.Polygon(pointList, { strokeColor: 'red', strokeWeight: 2, strokeOpacity: 0.5 })
+      on(this.polygon, 'dblclick', function() {
+        console.log('xxx')
+        // this.enableEditing()
+      })
+      on(this.polygon, 'contextmenu', function() {
+        console.log('xxx')
+        // this.disableEditing()
+      })
+      this.map.addOverlay(this.polygon)
     }
   }
 }

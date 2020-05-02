@@ -1,254 +1,186 @@
 <template>
-  <div>
-    <div class="scene">
-      <div class="carousel">
-        <div class="carousel__cell">1</div>
-        <div class="carousel__cell">2</div>
-        <div class="carousel__cell">3</div>
-        <div class="carousel__cell">4</div>
-        <div class="carousel__cell">5</div>
-        <div class="carousel__cell">6</div>
-        <div class="carousel__cell">7</div>
-        <div class="carousel__cell">8</div>
-        <div class="carousel__cell">9</div>
-        <div class="carousel__cell">10</div>
-        <div class="carousel__cell">11</div>
-        <div class="carousel__cell">12</div>
-        <div class="carousel__cell">13</div>
-        <div class="carousel__cell">14</div>
-        <div class="carousel__cell">15</div>
-      </div>
-    </div>
+  <div class="transform-page">
+    <component :is="state.view">
+      <h1>{{ state.view }}</h1>
+    </component>
 
-    <div class="carousel-options">
-      <p>
-        <label>
-          Cells
-          <input
-            class="cells-range"
-            type="range"
-            min="3"
-            max="15"
-            value="9"
-          >
-        </label>
-      </p>
-      <p>
-        <button class="previous-button">Previous</button>
-        <button class="next-button">Next</button>
-      </p>
-      <p>
-        Orientation:
-        <label>
-          <input
-            type="radio"
-            name="orientation"
-            value="horizontal"
-            checked
-          >
-          horizontal
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="orientation"
-            value="vertical"
-          >
-          vertical
-        </label>
-      </p>
-    </div>
+    <!-- Controls -->
+    <template id="controls">
+      <ul class="controls">
+        <li v-for="(animation, index) in state.animations" :key="index" :class="{ 'active': animation === state.view }" @click.prevent="setView(animation)">
+          {{ animation }}
+        </li>
+      </ul>
+    </template>
 
-    <div v-for="item in 10" :key="item.id" class="item">
-      {{ item }}
+    <!-- Transitions -->
+    <div class="page">
+      <transition
+        :css="false"
+        appear
+        @enter="enter"
+        @leave="leave"
+      >
+        <div class="page" :class="state.view">
+          <div class="center">
+            <slot />
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
+
 </template>
 
 <script>
-
 export default {
-  mounted() {
-    var carousel = document.querySelector('.carousel')
-    var cells = carousel.querySelectorAll('.carousel__cell')
-    var cellCount // cellCount set from cells-range input value
-    var selectedIndex = 0
-    var cellWidth = carousel.offsetWidth
-    var cellHeight = carousel.offsetHeight
-    var isHorizontal = true
-    var rotateFn = isHorizontal ? 'rotateY' : 'rotateX'
-    var radius, theta
-    // console.log( cellWidth, cellHeight );
-
-    function rotateCarousel() {
-      var angle = theta * selectedIndex * -1
-      carousel.style.transform = 'translateZ(' + -radius + 'px) ' +
-        rotateFn + '(' + angle + 'deg)'
-    }
-
-    var prevButton = document.querySelector('.previous-button')
-    prevButton.addEventListener('click', function() {
-      selectedIndex--
-      rotateCarousel()
-    })
-
-    var nextButton = document.querySelector('.next-button')
-    nextButton.addEventListener('click', function() {
-      selectedIndex++
-      rotateCarousel()
-    })
-
-    var cellsRange = document.querySelector('.cells-range')
-    cellsRange.addEventListener('change', changeCarousel)
-    cellsRange.addEventListener('input', changeCarousel)
-
-    function changeCarousel() {
-      cellCount = cellsRange.value
-      theta = 360 / cellCount
-      var cellSize = isHorizontal ? cellWidth : cellHeight
-      radius = Math.round((cellSize / 2) / Math.tan(Math.PI / cellCount))
-      for (var i = 0; i < cells.length; i++) {
-        var cell = cells[i]
-        if (i < cellCount) {
-          // visible cell
-          cell.style.opacity = 1
-          var cellAngle = theta * i
-          cell.style.transform = rotateFn + '(' + cellAngle + 'deg) translateZ(' + radius + 'px)'
-        } else {
-          // hidden cell
-          cell.style.opacity = 0
-          cell.style.transform = 'none'
-        }
+  data() {
+    return {
+      state: {
+        animations: ['fade', 'slide', 'slideUp', 'zoom', 'flipX', 'flipY'],
+        view: 'slide'
       }
-
-      rotateCarousel()
     }
-
-    var orientationRadios = document.querySelectorAll('input[name="orientation"]');
-    (function() {
-      for (var i = 0; i < orientationRadios.length; i++) {
-        var radio = orientationRadios[i]
-        radio.addEventListener('change', onOrientationChange)
-      }
-    })()
-
-    function onOrientationChange() {
-      var checkedRadio = document.querySelector('input[name="orientation"]:checked')
-      isHorizontal = checkedRadio.value === 'horizontal'
-      rotateFn = isHorizontal ? 'rotateY' : 'rotateX'
-      changeCarousel()
-    }
-
-    // set initials
-    onOrientationChange()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
+$color1: #461467;
+$color2: #ffba57;
+$color3: lighten(#ff7655, 20%);
+$color4: lighten(#00aca0, 10%);
+$color5: #8ed3c9;
+$color6: darken(#fcf5d8, 20%);
+
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
-body {
-  font-family: sans-serif;
-  text-align: center;
+.transform-page {
+	background: #202020;
+  font-size: 62.5%;
+
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(76,76,76,1);
+	background: -moz-linear-gradient(-45deg, rgba(76,76,76,1) 0%, rgba(43,43,43,0.74) 36%, rgba(28,28,28,0.5) 71%, rgba(19,19,19,0.29) 100%);
+	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(76,76,76,1)), color-stop(36%, rgba(43,43,43,0.74)), color-stop(71%, rgba(28,28,28,0.5)), color-stop(100%, rgba(19,19,19,0.29)));
+	background: -webkit-linear-gradient(-45deg, rgba(76,76,76,1) 0%, rgba(43,43,43,0.74) 36%, rgba(28,28,28,0.5) 71%, rgba(19,19,19,0.29) 100%);
+	background: -o-linear-gradient(-45deg, rgba(76,76,76,1) 0%, rgba(43,43,43,0.74) 36%, rgba(28,28,28,0.5) 71%, rgba(19,19,19,0.29) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(76,76,76,1) 0%, rgba(43,43,43,0.74) 36%, rgba(28,28,28,0.5) 71%, rgba(19,19,19,0.29) 100%);
+	background: linear-gradient(135deg, rgba(76,76,76,1) 0%, rgba(43,43,43,0.74) 36%, rgba(28,28,28,0.5) 71%, rgba(19,19,19,0.29) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=1 );
+	color: #fff;
 }
 
-.scene {
-  border: 1px solid #ccc;
-  margin: 40px 0;
-  position: relative;
-  width: 210px;
-  height: 140px;
-  margin: 80px auto;
-  perspective: 1000px;
+// Controls
+.controls {
+	position: absolute;
+	left: 50%;
+	bottom: 40px;
+	transform: translate(-50%, 0);
+	width: 100%;
+	margin-top: 30px;
+	text-align: center;
+	padding: 0;
+	li {
+		opacity: 0.6;
+		cursor: pointer;
+		overflow: hidden;
+		display: inline-block;
+		height: 30px;
+		margin: 0 10px;
+		padding: 0 30px;
+		border-radius: 10px;
+		font: .8rem/30px Arial, sans-serif;
+		font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+		background: #505050;
+
+		&.active {
+			background: lighten(#505050, 40%);
+		}
+	}
 }
 
-.carousel {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  transform: translateZ(-288px);
-  transform-style: preserve-3d;
-  transition: transform 1s;
+// Page
+.page {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background: #c0c0c0;
+
+	.center {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 100%;
+		font-size: 3rem;
+		text-align: center;
+	}
+
+	h1 {
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+		font-size: 2.8rem;
+		text-transform: capitalize;
+	}
+
+	p {
+		font-family: 'Vollkorn', Georgia, Times, serif;
+		font-size: 1.1rem;
+	}
+
+	a {
+		transition: color 200ms ease-out;
+		color: darken(rgba(#fff, .8), 40%);
+
+		&:hover {
+			color: darken(rgba(#fff, .8), 60%);
+		}
+	}
 }
 
-.carousel__cell {
-  position: absolute;
-  width: 190px;
-  height: 120px;
-  left: 10px;
-  top: 10px;
-  border: 2px solid black;
-  line-height: 116px;
-  font-size: 80px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  transition: transform 1s, opacity 1s;
+// Active animation
+.active-animation {
+	position: absolute;
+	top: 30px;
+	left: 50%;
+	transform: translate(-50%, 0);
 }
 
-.carousel__cell:nth-child(9n + 1) {
-  background: hsla(0, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 2) {
-  background: hsla(40, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 3) {
-  background: hsla(80, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 4) {
-  background: hsla(120, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 5) {
-  background: hsla(160, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 6) {
-  background: hsla(200, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 7) {
-  background: hsla(240, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 8) {
-  background: hsla(280, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 0) {
-  background: hsla(320, 100%, 50%, 0.8);
+// Page styles
+.fade {
+	background: $color1;
 }
 
-.carousel__cell:nth-child(1) {
-  transform: rotateY(0deg) translateZ(288px);
-}
-.carousel__cell:nth-child(2) {
-  transform: rotateY(40deg) translateZ(288px);
-}
-.carousel__cell:nth-child(3) {
-  transform: rotateY(80deg) translateZ(288px);
-}
-.carousel__cell:nth-child(4) {
-  transform: rotateY(120deg) translateZ(288px);
-}
-.carousel__cell:nth-child(5) {
-  transform: rotateY(160deg) translateZ(288px);
-}
-.carousel__cell:nth-child(6) {
-  transform: rotateY(200deg) translateZ(288px);
-}
-.carousel__cell:nth-child(7) {
-  transform: rotateY(240deg) translateZ(288px);
-}
-.carousel__cell:nth-child(8) {
-  transform: rotateY(280deg) translateZ(288px);
-}
-.carousel__cell:nth-child(9) {
-  transform: rotateY(320deg) translateZ(288px);
+.slide {
+	background: $color2;
 }
 
-.carousel-options {
-  text-align: center;
-  position: relative;
-  z-index: 2;
-  background: hsla(0, 0%, 100%, 0.8);
+.zoom {
+	background: $color3;
+}
+
+.flipX {
+	background: $color4;
+}
+
+.flipY {
+	background: $color5;
+}
+
+.slideUp {
+	background: $color6;
 }
 </style>

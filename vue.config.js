@@ -24,12 +24,13 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
+  publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
+    // host: '192.168.100.17',
     port: port,
     open: true,
     overlay: {
@@ -45,7 +46,8 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        '@static': resolve('static')
+        '@static': resolve('static'),
+        '@package': resolve('package')
       }
     }
   },

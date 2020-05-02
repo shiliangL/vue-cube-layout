@@ -56,10 +56,15 @@ Vue.prototype.$ScrollIntoView = ScrollIntoView
 Vue.prototype.$guid_dev = guid_dev
 
 // 其他包使用
-import BaiduMap from '@/Bmap'
+// import BaiduMap from '@/Bmap'
+// import BaiduMap from 'vue-baidu-map'
+import BaiduMap from '@/vmap'
 Vue.use(BaiduMap, {
   ak: 'ggeG9Ii3jcwnXUvVXNQ6vjRYUXV5Ckhz'
 })
+
+import topUi from '@package/index'
+Vue.use(topUi)
 
 new Vue({
   el: '#app',

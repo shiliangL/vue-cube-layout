@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="list" border fit highlight-current-row style="width: 100%">
+  <el-table :data="list" border :height="height" fit highlight-current-row style="width: 100%">
     <el-table-column
       v-loading="loading"
       align="center"
@@ -71,6 +71,10 @@ export default {
     type: {
       type: String,
       default: 'CN'
+    },
+    // eslint-disable-next-line vue/require-default-prop
+    height: {
+      type: [String, Number]
     }
   },
   data() {

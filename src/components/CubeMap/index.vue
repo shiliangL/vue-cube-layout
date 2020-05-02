@@ -19,6 +19,8 @@
           <template v-for="marker in item.overlays">
             <bm-marker
               :key="marker.id + 'marker'"
+              :clicking="true"
+              title="title - marker"
               :dragging="marker.dragging"
               :position="{lng: marker.lng, lat: marker.lat}"
               @click="markerClick($event,item.type,marker)"
@@ -138,6 +140,16 @@ export default {
       type: Boolean,
       default: () => false
     },
+    // 点击Marker的时候是否自动导航到最优可视区域
+    isSetViewToMarkerClick: {
+      type: Boolean,
+      default: () => true
+    },
+    // 绘制的覆盖物是否可以右键
+    overlaysCanRightClick: {
+      type: Boolean,
+      default: () => true
+    },
     markerList: {
       type: Array,
       default: () => [{ type: 'layer', overlays: [], labels: [], show: true, showLabels: false }]
@@ -155,21 +167,21 @@ export default {
       drawType: null,
       map: null,
       styleOptions: {
-        strokeColor: '#3689F3', // 边线颜色。
+        strokeColor: 'red', // 边线颜色。
         fillColor: '#3689F3', // 填充颜色。当参数为空时，圆形将没有填充效果。
-        strokeWeight: 2, // 边线的宽度，以像素为单位。
-        strokeOpacity: 0.8, // 边线透明度，取值范围0 - 1。
+        strokeWeight: 1, // 边线的宽度，以像素为单位。
+        strokeOpacity: 0.5, // 边线透明度，取值范围0 - 1。
         fillOpacity: 0.4, // 填充的透明度，取值范围0 - 1。
-        strokeStyle: 'dashed。' // 边线的样式，solid dashed。
+        strokeStyle: 'dashed' // 边线的样式，solid dashed。
       }
     }
   },
   methods: {
-    mapReady({ map }) {
+    mapReady({ map, BMap }) {
       // console.log(map)
       this.map = map
       this.map.enableScrollWheelZoom()
-      this.$emit('mapReady', map)
+      this.$emit('mapReady', map, BMap)
       // this.initDrawingManager(map)
     },
     controlReady(e) {
@@ -274,10 +286,11 @@ export default {
       }
     },
     markerClick(e, type, marker) {
-      const { lat, lng } = marker
-      // eslint-disable-next-line no-undef
-      this.map && this.map.setViewport([new BMap.Point(lng, lat)])
-      setTimeout(_ => { this.$emit('markerClick') }, 200)
+      if (this.isSetViewToMarkerClick) {
+        const { lat, lng } = marker
+        this.map && this.map.setViewport([new BMap.Point(lng, lat)])
+      }
+      this.$emit('markerClick', e, type, marker)
     },
     getBetterViewByOverlays() {
       if (this.map) {
@@ -298,7 +311,31 @@ export default {
         // eslint-disable-next-line no-undef
         const b = pointArray.map((item) => new BMap.Point(item.lng, item.lat)) || []
         this.map.setViewport(b)
+
+        this.getAllPoints()
       }
+    },
+    // 获取地图所有覆盖物坐标
+    getAllPoints() {
+      // "marker"  "polygon" "polyline"
+      const markers = []
+      const polygons = []
+      const polylines = []
+      const pointsOnMap = this.map.getOverlays() || []
+      if (pointsOnMap.length) {
+        for (const item of pointsOnMap) {
+          if (item.__overLayoutKey__ === 'marker') {
+            markers.push(item.point)
+          } else if (item.__overLayoutKey__ === 'polygon') {
+            polygons.push(item.Sn)
+          } else if (item.__overLayoutKey__ === 'polyline') {
+            polylines.push(item.Sn)
+          }
+        }
+      }
+      console.log(markers)
+      console.log(polygons)
+      console.log(polylines)
     }
   }
 }

@@ -319,6 +319,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/qrcodeRoad',
+    component: () => import('@/views/login/qrcodeRoad'),
+    hidden: true
+  },
+  {
     path: '/auth-redirect',
     component: () => import('@/views/login/auth-redirect'),
     hidden: true
