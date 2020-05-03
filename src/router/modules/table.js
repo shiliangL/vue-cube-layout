@@ -1,41 +1,36 @@
-/** When your routing table is too long, you can split it into small modules **/
+/** When your routing table is too long, you can split it into small modules**/
 
 import Layout from '@/layout'
 
-const tableRouter = {
-  path: '/table',
+const cubeTableRouter = {
+  path: '/cubeTable',
   component: Layout,
-  redirect: '/table/complex-table',
-  name: 'Table',
+  redirect: 'noRedirect',
+  name: 'cubeTable',
   meta: {
-    title: 'Table',
+    title: 'cubeTable应用',
     icon: 'table'
   },
   children: [
     {
-      path: 'dynamic-table',
-      component: () => import('@/views/table/dynamic-table/index'),
-      name: 'DynamicTable',
-      meta: { title: 'Dynamic Table' }
+      path: 'CubeTableList',
+      component: () => import('@/views/cubeTable/CubeTableList'),
+      name: 'CubeTableList',
+      meta: { title: '常规业务列表', noCache: true }
     },
     {
-      path: 'drag-table',
-      component: () => import('@/views/table/drag-table'),
-      name: 'DragTable',
-      meta: { title: 'Drag Table' }
+      path: 'ExpandTable',
+      component: () => import('@/views/cubeTable/ExpandTable'),
+      name: 'ExpandTable',
+      meta: { title: '展开拓展表格', noCache: true }
     },
     {
-      path: 'inline-edit-table',
-      component: () => import('@/views/table/inline-edit-table'),
-      name: 'InlineEditTable',
-      meta: { title: 'Inline Edit' }
-    },
-    {
-      path: 'complex-table',
-      component: () => import('@/views/table/complex-table'),
-      name: 'ComplexTable',
-      meta: { title: 'Complex Table' }
+      path: 'TableLoadMore',
+      component: () => import('@/views/cubeTable/TableLoadMore'),
+      name: 'TableLoadMore',
+      meta: { title: '滚动加载更多', noCache: true }
     }
   ]
 }
-export default tableRouter
+
+export default cubeTableRouter

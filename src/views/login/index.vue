@@ -104,9 +104,6 @@ import { validUsername } from '@/utils/validate'
 const backgroundImage = 'https://img.alicdn.com/tfs/TB1zsNhXTtYBeNjy1XdXXXXyVXa-2252-1500.png'
 import dayjs from 'dayjs'
 
-import * as THREE from 'three'
-import BIRDS from 'vanta/dist/vanta.birds.min'
-
 export default {
   name: 'Login',
   data() {
@@ -151,12 +148,6 @@ export default {
   },
   mounted() {
     this.getCaptcha()
-    this.$nextTick().then((_) => {
-      this.vantaEffect = BIRDS({
-        el: '#birds',
-        THREE: THREE // use a custom THREE when initializing
-      })
-    })
   },
   beforeDestroy() {
     this.vantaEffect && this.vantaEffect.destroy() // <-- doesn't seem to work for me

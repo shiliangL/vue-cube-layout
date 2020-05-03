@@ -1,30 +1,59 @@
 <template>
-  <div class="search-bar">
-    <template v-if="data && data.length > 0">
-      <template v-if="data[0] && data[0].length">
+  <div
+    id="SearchBar"
+    class="search-bar"
+  >
+    <template v-if="data && data.length">
+      <!-- 左边组件类型 -->
+      <template v-if="data && data[0] && data[0].length">
         <div
           v-for="(item, index) in data[0]"
           :key="index"
           class="left"
         >
-          <!-- date 日期 2020年02月29日-->
           <template v-if="item.type === 'date'">
             <el-date-picker
               v-model="item.value"
-              clearable
-              :class="item.class?item.class:'w110'"
-              size="small"
+              :style="{width:'134px'}"
+              :size="size"
               value-format="yyyy-MM-dd"
+              :picker-options="dateTimePicker(item.minDate,item.maxDate)"
               type="date"
               :placeholder="item.placeholder"
             />
           </template>
-          <!-- option 下拉 -->
+          <template v-if="item.type === 'cubeSelectTree'">
+            <CubeSelectTree
+              ref="selectTree"
+              v-model="item.value"
+              :config="item.config || {} "
+            />
+          </template>
+          <template v-if="item.type === 'date-year'">
+            <el-date-picker
+              v-model="item.value"
+              :style="{width:'134px'}"
+              :size="size"
+              value-format="yyyy"
+              type="year"
+              :placeholder="item.placeholder"
+            />
+          </template>
+          <template v-if="item.type === 'date-month'">
+            <el-date-picker
+              v-model="item.value"
+              :style="{width:'134px'}"
+              :size="size"
+              value-format="yyyy-MM"
+              type="month"
+              :placeholder="item.placeholder"
+            />
+          </template>
           <template v-else-if="item.type === 'option'">
             <el-select
               v-model="item.value"
               :class="item.class?item.class:'w90'"
-              size="small"
+              :size="size"
               clearable
               filterable
               :placeholder="item.placeholder"
@@ -45,7 +74,7 @@
           <template v-else-if="item.type === 'cascader'">
             <el-cascader
               v-model="item.value"
-              size="small"
+              :size="size"
               :placeholder="item.placeholder"
               :class="item.class?item.class:'w180'"
               :options="item.options"
@@ -54,74 +83,35 @@
               filterable
             />
           </template>
-          <!-- datetime 日期时间 2020年02月29日15:57:54 -->
-          <template v-if="item.type === 'datetime'">
-            <el-date-picker
-              v-model="item.value"
-              :class="item.class?item.class:'w180'"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              type="datetime"
-              size="small"
-              clearable
-              :placeholder="item.placeholder"
-            />
-          </template>
-          <!-- input 输入 -->
           <template v-else-if="item.type === 'input'">
             <el-input
               v-model="item.value"
+              :class="item.class ? item.class :'w180' "
+              :size="size"
               clearable
-              :class="item.class"
-              size="small"
               :placeholder="item.placeholder"
               @keyup.enter.native="search"
             />
           </template>
-          <!-- cubeSelect 分页选择 返回id  -->
-          <!-- <template v-else-if="item.type === 'cubeSelect'">
-            <CubeSelect
-              v-model="item.value"
-              v-bind="item.props"
-              :placeholder="item.placeholder"
-              :search-name="item.searchName"
-              :focus-onload="false"
-              :width="item.width ? item.width : 330"
-              :popover-width="item.popoverWidth ? item.popoverWidth : 330"
-              :key-name="item.keyName"
-              :key-code="item.keyCode"
-              :url="item.url"
-              :method="item.method ? item.method : 'POST'"
-              :column="item.column"
-            />
-          </template> -->
-
-          <!-- tree 树形选择 返回id  -->
-          <template v-else-if="item.type === 'tree'">
-            <CubeSelectTree v-model="item.value" :placeholder="item.placeholder|| '请选择'" :options="item.options || []" />
-          </template>
-
-          <!-- daterange-dateTime  日期范围  2020年02月29日-2020年02月29日 -->
           <template v-if="item.type === 'multiple-date'">
             <el-date-picker
-              v-if="item.dateTimeRange"
               v-model="item.value"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              type="datetimerange"
-              size="small"
-              clearable
-              :class="item.class?item.class:'w240'"
+              :class="item.class?item.class:'w300'"
+              value-format="yyyy-MM-dd"
+              type="daterange"
+              :size="size"
               range-separator="至"
               :start-placeholder="item.placeholder1"
               :end-placeholder="item.placeholder2"
             />
+          </template>
+          <template v-if="item.type === 'multiple-date-time'">
             <el-date-picker
-              v-else
               v-model="item.value"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              size="small"
-              clearable
-              :class="item.class?item.class:'w240'"
+              :class="item.class?item.class:'w320'"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetimerange"
+              :size="size"
               range-separator="至"
               :start-placeholder="item.placeholder1"
               :end-placeholder="item.placeholder2"
@@ -130,62 +120,82 @@
           <template v-else-if="item.type === 'search'">
             <el-button
               type="primary"
-              :icon="item.icon ? item.icon : 'el-icon-search' "
-              size="small"
+              icon="el-icon-search"
+              :size="size"
               @click="search"
             >{{ item.name }}</el-button>
           </template>
           <template v-else-if="item.type === 'reset'">
             <el-button
-              :icon="item.icon ? item.icon : 'el-icon-refresh' "
               type="primary"
-              size="small"
               plain
+              icon="el-icon-refresh"
+              :size="size"
               @click="clickReset"
             >{{ item.name }}</el-button>
           </template>
         </div>
       </template>
-      <template v-if="data[1] && data[1].length">
-        <template>
-          <div class="right">
-            <div
-              v-for="(item, index) in data[1]"
-              :key="index"
-              class="left"
-            >
-              <template v-if="item.type === 'button'">
+      <!-- 右边操作区域 -->
+      <template v-if="data && data[1] && data[1].length">
+        <div class="right">
+          <div
+            v-for="(item, index) in data[1]"
+            :key="index"
+            class="left"
+          >
+            <template v-if="item.type === 'add'">
+              <el-button
+                :size="size"
+                type="success"
+                icon="el-icon-plus"
+                @click.stop="item.action ? item.action() :clickAdd(item)"
+              >{{ item.name ? item.name : '新增' }}</el-button>
+            </template>
+
+            <template v-if="item.type === 'del'">
+              <el-button
+                :size="size"
+                type="danger"
+                icon="el-icon-delete"
+                @click.stop="item.action ? item.action() :clickDel(item)"
+              >删除</el-button>
+            </template>
+
+            <template v-if="item.type === 'button'">
+              <el-button
+                :plain="true"
+                :size="size"
+                :icon="item.icon"
+                :type="item.btType"
+                @click="item.click ? item.click($event) : null"
+                @click.stop="item.action ? item.action() :clickBtn(item)"
+              >{{ item.name }}</el-button>
+            </template>
+
+            <template v-else-if="item.type === 'more'">
+              <el-dropdown
+                trigger="click"
+                @command="command"
+              >
                 <el-button
-                  size="small"
-                  :type="item.keyType"
-                  :icon="item.icon"
-                  @click.stop="item.action ? item.action() :clickBtn(item)"
-                >{{ item.name }}</el-button>
-              </template>
-              <template v-else-if="item.type === 'more'">
-                <el-dropdown
-                  trigger="click"
-                  split-button
                   type="primary"
-                  size="small"
-                  @command="command"
-                >
-                  {{ item.name || '更多操作' }}
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      v-for="(itemK,i) in item.options"
-                      :key="i"
-                      :icon="itemK.icon"
-                      :command="itemK.label"
-                    >
-                      <span style="display: inline-block;" @click="itemK.action ? itemK.action() : null"> {{ itemK.label }} </span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </template>
-            </div>
+                  :size="size"
+                  plain
+                >{{ item.name || '更多操作' }}<i class="el-icon-arrow-down el-icon--right" /></el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item
+                    v-for="(itemK,i) in item.labels"
+                    :key="i"
+                    :icon="itemK.icon"
+                    :command="itemK.label"
+                    @click.native="itemK.action ? itemK.action() : null"
+                  >{{ itemK.label }}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
           </div>
-        </template>
+        </div>
       </template>
     </template>
   </div>
@@ -193,41 +203,51 @@
 
 <script>
 
-// import Treeselect from '@riophae/vue-treeselect'
-// import CubeSelect from '@/components/CubeSelect'
+//  常量类型
+const commonlyTypes = [
+  'input', 'select', 'option', 'cascader',
+  'date', 'datetime', 'date-month',
+  'tree', 'cubeSelect']
 
-// 定义类型
-const commonlyTypes = ['input', 'select', 'option', 'date', 'datetime', 'cascader', 'tree', 'cubeSelect']
-import CubeSelectTree from '../../CubeSelectTree/index'
+import { deepClone } from '../../utils'
+
+import CubeSelectTree from '../../CubeSelectTree'
 
 export default {
   name: 'SearchBar',
+  componentName: 'SearchBar',
   components: {
     CubeSelectTree
   },
   props: {
+    size: {
+      type: String,
+      default: () => 'small'
+    },
     data: {
       type: Array,
-      required: true,
       default: () => []
     }
   },
   data() {
     return {
-      normalizer(node) {
-        // 去掉children=[]的children属性
-        if (node.children && !node.children.length) {
-          delete node.children
-        }
-        return {
-          id: node.id,
-          label: node.label,
-          children: node.children
-        }
-      }
     }
   },
+  created() {
+    this.initParam()
+  },
   methods: {
+    initParam() {
+      if (this.data.length > 0 && this.data[0] && this.data[0].length > 0) {
+        const items = this.data[0]
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i]
+          if (item['initValue']) {
+            item['value'] = item['initValue']
+          }
+        }
+      }
+    },
     clickReset() {
       if (this.data.length > 0 && this.data[0] && this.data[0].length > 0) {
         const items = this.data[0]
@@ -235,12 +255,21 @@ export default {
           const item = items[i]
           if (item['type'] === 'search') {
             break
+          } else if (item['initValue']) {
+            item['value'] = item['initValue']
           } else {
-            item['value'] = ''
+            item['value'] = null
           }
         }
       }
-      this.$emit('reset')
+      if (this.$refs['selectTree']) {
+        this.$refs['selectTree'][0].clear()
+      }
+      this.$emit('reset', this.getSearchParams())
+    },
+    search() {
+      const params = this.getSearchParams()
+      this.$emit('search', params)
     },
     getSearchParams() {
       // 获取选择参数
@@ -259,25 +288,47 @@ export default {
               params[item['key1']] = null
               params[item['key2']] = null
             }
+          } else if (item['type'] === 'cubeSelectTree') {
+            params[item['key']] = item.value ? item.value[item.config.keyCode] ? item.value[item.config.keyCode] : '' : ''
           } else if (item['type'] === 'search') {
             break
           }
         }
       }
-      return params
-    },
-    search() {
-      const params = this.getSearchParams()
-      this.$emit('search', params)
+      return deepClone(params)
     },
     clickAdd() {
       this.$emit('add')
     },
+    clickDel() {
+      this.$emit('del')
+    },
     clickBtn(item) {
+      this.$emit('button', item)
       this.$emit('clickBtn', item)
     },
     command(command) {
       this.$emit('command', command)
+    },
+    dateTimePicker(minDate, maxDate) {
+      if (minDate && maxDate) {
+        return {
+          disabledDate: time => (time.getTime() > new Date(maxDate).getTime() || time.getTime() < new Date(minDate).getTime())
+        }
+      }
+      if (maxDate) {
+        return {
+          disabledDate: time => (maxDate ? time.getTime() > new Date(maxDate).getTime() : false)
+        }
+      }
+      if (minDate) {
+        return {
+          disabledDate: time => (minDate ? time.getTime() < new Date(minDate).getTime() : false)
+        }
+      }
+      return {
+        disabledDate: false
+      }
     }
   }
 }
@@ -286,12 +337,12 @@ export default {
 <style lang="scss" scoped>
 .search-bar {
   width: 100%;
-  clear: both;
-  margin-bottom: 2px;
-  padding-bottom: 2px;
-  border-bottom: 1px solid #dfecf9;
   background-color: white;
-
+  clear: both;
+  margin-top: -6px;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #dfecf9;
   &:after {
     visibility: hidden;
     display: block;
@@ -306,80 +357,41 @@ export default {
     height: 40px;
     > div {
       margin-right: 4px;
-    }
-    > button {
-      margin-right: 4px;
+      margin-top: 10px;
     }
 
-    // .el-range-editor--small.el-input__inner {
-    //   margin-top: 5px;
-    //   padding-left: 5px;
-    //   padding-right: 0;
-    //   width: 215px;
-    // }
+    .el-button {
+      margin-top: 10px;
+      margin-left: 4px;
+    }
 
-    // .el-date-editor .el-range-separator {
-    //   padding: 0;
-    //   line-height: 24px;
-    //   margin-left: 3px;
-    //   margin-right: 5px;
-    // }
-
-    // .el-range-editor--small .el-range-input {
-    //   min-width: 80px;
-    // }
-
-    // .el-date-editor--datetimerange {
-    //   .el-range-input {
-    //     min-width: 130px;
-    //   }
-    // }
+    .el-range-editor--small.el-input__inner {
+      padding-left: 5px;
+      padding-right: 0;
+      width: 226px;
+    }
+    .el-date-editor .el-range-separator {
+      padding: 0;
+      line-height: 24px;
+      margin-left: 3px;
+      margin-right: 5px;
+    }
+    .el-range-editor--small .el-range-input {
+      min-width: 80px;
+    }
+    .el-date-editor--datetimerange {
+      .el-range-input {
+        min-width: 130px;
+      }
+    }
   }
 
   .right {
     float: right;
-    margin-right: 10px;
-  }
-
-  /deep/.el-range-separator {
-    color: #c2c5ce;
-  }
-
-  .el-input {
-    float: left;
-  }
-
-  .el-button {
-    float: left;
-  }
-}
-
-div.left {
-  margin-left: 5px;
-}
-
-.tree {
-  font-size: 13px;
-}
-
-.vue-treeselect {
-  font-size: 13px;
-  color: #838487;
-  font-weight: normal !important;
-  /deep/.vue-treeselect__control {
-    height: 30px;
-    line-height: 30px;
-    margin-top: 5px;
-  }
-  /deep/.vue-treeselect__placeholder {
-    font-size: 13px;
-  }
-  /deep/.vue-treeselect__input {
-    font-size: 13px;
-    color: #838487;
-  }
-  /deep/.el-collapse-item__content {
-    z-index: 9999999 !important;
+    > div {
+      margin-left: 10px;
+      margin-top: 5px;
+    }
   }
 }
 </style>

@@ -1,12 +1,13 @@
 import { login, logout, getInfo, checkToken } from '@/api/user'
 import { getToken, setToken, removeToken, setTokenR, getRefreshToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import cube from '@/assets/imgs/cube.png'
 
 const state = {
   token: getToken(),
   refresh_token: getRefreshToken(),
   name: '',
-  avatar: '',
+  avatar: cube,
   introduction: '',
   roles: [],
   appSettings: [],

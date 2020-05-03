@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'Tab',
+  name: 'CubeTableListPage',
   data() {
     return {
       type: 1,
@@ -20,6 +20,22 @@ export default {
             [
               {
                 type: 'option', value: null, key: 'sectionId', placeholder: '请选择标段', class: 'w180', options: []
+              },
+              {
+                type: 'cubeSelectTree',
+                value: null,
+                key: 'sectionId',
+                config: {
+                  keyName: 'label',
+                  keyCode: 'value',
+                  url: '/map/getSectionTree',
+                  focusOnload: false, // 仅仅加载一次
+                  placeholder: '请选择标段',
+                  treeDefaultProps: {
+                    children: 'children',
+                    label: 'label'
+                  }
+                }
               },
               {
                 type: 'multiple-date',
@@ -55,7 +71,6 @@ export default {
         },
         table: {
           tableHeight: 250,
-          tableExpand: true,
           calcTableHeight: true, // 是否开启表格自动高度计算
           columns: [
             {

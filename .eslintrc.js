@@ -21,6 +21,9 @@ module.exports = {
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    "vue/attribute-hyphenation": ["error", "always" | "never", {
+      "ignore": ['custom-prop']
+    }],
     "vue/max-attributes-per-line": [2, {
       "singleline": 10,
       "multiline": {

@@ -1,6 +1,9 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <transition
+      name="fade-transform"
+      mode="out-in"
+    >
       <keep-alive :include="cachedViews">
         <router-view :key="key" />
       </keep-alive>
@@ -29,20 +32,27 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+
+  flex: 1;
+  flex-basis: auto;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 10px;
 }
 
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 
 .hasTagsView {
   .app-main {
     /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
+    // min-height: calc(100vh - 84px);
+    min-height: calc(100vh - 0px);
   }
 
-  .fixed-header+.app-main {
-    padding-top: 84px;
+  .fixed-header + .app-main {
+    padding-top: 94px;
   }
 }
 </style>

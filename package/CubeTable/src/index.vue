@@ -5,6 +5,7 @@
     :ref="name"
     v-loadMore="loadMore"
     v-loading="loading"
+    :row-key="rowKey"
     class="cube-table"
     :border="border"
     style="width: 100%;"
@@ -19,6 +20,7 @@
     :header-cell-style="headerCellStyle"
     :row-class-name="rowClassName"
     :cell-class-name="cellClassName"
+    :expand-row-keys="expandKeysArray"
     @row-click="tableRowClick"
     @expand-change="expandChange"
   >
@@ -42,7 +44,7 @@
             >
               <template v-if="column.type==='expand'">
                 <slot
-                  :item="props.row"
+                  :row="props.row"
                   name="expand"
                 />
               </template>
@@ -83,7 +85,7 @@
           :align="column.align ? column.align : 'center' "
           :label="column.label"
           :prop="column.key"
-          :width="column.label ==='操作' ? column.width ? column.width : 140: 'auto'"
+          :width="column.label ==='操作' ? column.width ? column.width : 140 : column.width ? column.width : 'auto'"
           :fixed="column.fixed"
           tooltip-effec="light"
           :show-overflow-tooltip="!column.tooltip"
@@ -113,7 +115,7 @@
 <script>
 
 import { Table, TableColumn } from 'element-ui'
-import { deepClone, deepMerge } from '../../uitls/index'
+import { deepClone, deepMerge } from '../../utils'
 
 export default {
   name: 'CubeTable',
@@ -166,7 +168,8 @@ export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
     rowKey: {
-      type: String
+      type: String,
+      default: () => 'id'
     },
     loading: {
       type: Boolean,
@@ -205,7 +208,7 @@ export default {
     },
     loadMore: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     // 是否初始化数据之后默认选择第一个
     initSeletTheFirst: {
@@ -307,6 +310,7 @@ export default {
   data() {
     return {
       name: 'CubeTable',
+      expandKeysArray: [],
       initConfig: {
         data: [],
         columns: []
@@ -316,23 +320,30 @@ export default {
   watch: {
     config: {
       immediate: true,
-      // deep: true,
       handler() {
         setTimeout(() => {
           const { config, initConfig } = this
           this.initConfig = deepMerge(initConfig, config || {})
-          console.log(this.initConfig, 'xx')
           if (this.initSeletTheFirst) {
             const row = this.initConfig.data[0]
             this.setCurrent(row)
           }
         }, 0)
       }
+    },
+    'config.data': {
+      immediate: true,
+      handler(data) {
+        this.initConfig.data = data || []
+        if (this.initSeletTheFirst) {
+          const row = this.initConfig.data[0]
+          this.setCurrent(row)
+        }
+      }
     }
   },
   methods: {
     getTableSelection() {
-      // 获取表格勾选项目
       const TableSelection = this.$refs[this.name] && this.$refs[this.name].selection || []
       return deepClone(TableSelection)
     },
@@ -341,6 +352,15 @@ export default {
       this.tableRowClick(row)
     },
     expandChange(row, expandedRows) {
+      const that = this
+      if (expandedRows.length) {
+        that.expandKeysArray = []
+        if (row) {
+          that.expandKeysArray.push(row.id)
+        }
+      } else {
+        that.expandKeysArray = []
+      }
       this.$emit('expandChange', row, expandedRows)
     },
     tableRowClick(row) {
@@ -350,6 +370,33 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.flex-box-table-row,
+.flex-table-cell {
+  font-weight: 500;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-around;
+  .btn-text {
+    font-size: 12px;
+    color: #409eff;
+    &:active {
+      color: #3a8ee6;
+      background-color: transparent;
+    }
+  }
+  .delete-text {
+    font-size: 12px;
+    color: #f56c6c;
+  }
+}
+.el-table__expanded-cell[class*="cell"] {
+  padding: 10px !important;
+}
 
+.el-table__row {
+  &.expanded {
+    color: #409eff;
+  }
+}
 </style>
