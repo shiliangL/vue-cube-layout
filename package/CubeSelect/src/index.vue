@@ -3,58 +3,88 @@
   <div
     v-clickOutside="miss"
     class="CubeSelect"
-    :style="{width: defaultConfig.inputWidth ? defaultConfig.inputWidth : 'auto' }"
   >
     <el-input
       v-model.trim="selectValue"
-      filterable
-      :disabled="disabled"
-      :size="defaultConfig.size"
+      :style="{width: defaultConfig.inputWidth? defaultConfig.inputWidth : '' }"
       :placeholder="placeholder2"
+      :size="defaultConfig.size"
+      :disabled="disabled"
+      :filterable="defaultConfig.filterable"
       :clearable="defaultConfig.clearable"
       @focus="focus"
       @blur="blur"
       @clear="clear"
       @input="input"
+    />
+
+    <el-popover
+      v-model="visible"
+      class="popover"
+      placement="bottom"
+      :width="defaultConfig.popoverWidth"
+      @hide="hidePopover"
     >
       <div
-        v-if="defaultConfig.tipButtonVisible"
-        slot="append"
-        @click.stop="focus"
-        v-text="defaultConfig.tipButtonText"
-      />
-    </el-input>
-    <transition name="el-zoom-in-center">
-      <el-popover
-        v-model="visible"
-        class="popover"
-        placement="bottom"
-        :width="defaultConfig.popoverWidth"
-        @hide="hidePopover"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(242, 248, 254, 0.9)"
+        style="text-align: right; margin: 0"
       >
-        <div style="text-align: right; margin: 0">
-          <el-tree
-            ref="tree"
-            highlight-current
-            :default-expand-all="true"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            :data="tableData"
-            :node-key="defaultConfig.keyCode"
-            :props="defaultConfig.treeDefaultProps"
-            @node-click="handleNodeClick"
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          size="mini"
+          :height="defaultConfig.tableHeight"
+          highlight-current-row
+          :row-style="rowStyle"
+          element-loading-text="数据加载中..."
+          @row-click="rowClick"
+        >
+          <el-table-column
+            label="序号"
+            type="index"
+            :index="indexMethod"
           />
-        </div>
-        <div
-          v-if="loading"
-          v-loading="loading"
-          class="loadingMark"
-          element-loading-text="拼命加载中"
-          element-loading-spinner="el-icon-loading"
-          element-loading-background="rgba(242, 248, 254, 0.9)"
+          <el-table-column
+            v-for="(item,index) in defaultConfig.column"
+            :key="index"
+            show-overflow-tooltip
+            :width="item.width ? item.width : null "
+            :align="item.align ? item.align : 'center' "
+            :prop="item.prop"
+            :label="item.label"
+          >
+            <template slot-scope="scope">
+              <template v-if="!item.render">
+                <template>
+                  <span>{{ scope.row[item.key] }}</span>
+                </template>
+              </template>
+              <template v-else>
+                <render
+                  :column="item"
+                  :index="index"
+                  :render="item.render"
+                  :row="scope.row"
+                />
+              </template>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          small
+          :pager-count="5"
+          class="pagination"
+          layout="total,prev, pager, next"
+          :current-page="defaultConfig.pagination.currentPage"
+          :page-size="defaultConfig.pagination.size"
+          :total="defaultConfig.pagination.total"
+          @current-change="handleCurrentChange"
         />
-      </el-popover>
-    </transition>
+      </div>
+    </el-popover>
   </div>
 
 </template>
@@ -65,11 +95,32 @@ import debounce from 'throttle-debounce/debounce'
 import request from '../../utils/request'
 import { deepMerge } from '../../utils'
 import { isObject } from '../../utils/types'
-import Scroll2Target from 'vue-scrollto'
 import emitter from '../../mixProps/emitter'
 
 export default {
-  name: 'CubeSelectTree',
+  name: 'CubeSelect',
+  components: {
+    render: {
+      functional: true,
+      props: {
+        row: Object,
+        render: Function,
+        index: Number,
+        column: {
+          type: Object,
+          default: null
+        }
+      },
+      render: (h, opt) => {
+        const params = {
+          row: opt.props.row,
+          index: opt.props.index
+        }
+        if (opt.props.column) params.column = opt.props.column
+        return opt.props.render(h, params)
+      }
+    }
+  },
   directives: {
     clickOutside: {
       bind(el, binding, vnode) {
@@ -100,7 +151,7 @@ export default {
   props: {
     validateEvent: {
       type: Boolean,
-      default: false
+      default: true
     },
     disabled: {
       type: Boolean,
@@ -116,7 +167,7 @@ export default {
     },
     value: { // 编辑显示传入对象
       type: [Object, String],
-      // { label: '显示名称',value: '选择value'}
+      // { key: 'name', label: '名称' },
       default: () => { }
     }
   },
@@ -130,36 +181,39 @@ export default {
       tableData: [],
       // 默认参数
       defaultConfig: {
-        // 显示输入区域
         keyName: 'label', // 显示选择名称
         keyCode: 'value', // 选择关键key
+        otherProps: [], // 除了需要返回 keyName 、 keyCode 之外的其他数据
         placeholder: '请选择',
         clearable: true,
-        tipButtonVisible: false,
-        tipButtonText: '选择',
         popoverWidth: 320, // 弹层宽度
         inputWidth: '220px', // 输入框宽度
         size: 'small',
-        // 树区域
-        selectAny: false,
-        treeDefaultProps: {
-          children: 'children',
-          label: 'label'
-        },
+        // 表格区域
+        tableHeight: 250,
+        column: [
+          { key: 'name', label: '名称' },
+          { key: 'code', label: '编码' }
+        ],
         // 请求额外设置参数 -  网络数据加载区域
+        searchName: 'name',
         method: 'POST',
         url: '',
         focusOnload: true,
         // 选择返回值设置
-        selectValuekey: []
+        selectValuekey: [],
+        pagination: {
+          size: 10, // 分页每页默认显示10条
+          currentPage: 1, // 当前默认第一页
+          total: 0 // 总条数
+        }
       }
     }
   },
   watch: {
     value: {
       immediate: true,
-      handler(value) {
-        // 存在 一定是对象 不然显示很多问题
+      handler(value, valueOld) {
         if (value && isObject(value)) {
           const { keyName } = this.defaultConfig
           this.recordSelect = value
@@ -171,7 +225,6 @@ export default {
           this.selectValue = ''
           this.recordSelect = null
           this.placeholder2 = this.defaultConfig.placeholder
-          this.$refs['tree'] && this.$refs['tree'].setCurrentKey(null)
         }
       }
     },
@@ -183,39 +236,13 @@ export default {
       }
     }
   },
-  mounted() {
-    this.inputChange = debounce(800, (name) => this.$refs.tree.filter(name))
-  },
   beforeDestroy() {
     this.recordSelect = null
   },
+  mounted() {
+    this.inputChange = debounce(800, (name) => this.fetchTableData())
+  },
   methods: {
-    setScroll2Target() {
-      setTimeout(_ => {
-        const { recordSelect } = this
-        const { keyCode } = this.defaultConfig
-        if (recordSelect) {
-          const targetKey = recordSelect[keyCode]
-          this.$refs['tree'] && this.$refs['tree'].setCurrentKey(targetKey)
-          if (this.$el.querySelector('.el-popover')) {
-            setTimeout(_ => {
-              const targetContainer = this.$el.querySelector('.el-popover')
-              const el = this.$el.querySelector('.is-current')
-              if (!el) return
-              const options = {
-                container: targetContainer,
-                easing: 'ease-in',
-                force: true,
-                cancelable: true,
-                x: false,
-                y: true
-              }
-              Scroll2Target.scrollTo(el, 220, options)
-            }, 0)
-          }
-        }
-      }, 200)
-    },
     focus() {
       const { recordSelect } = this
       const { focusOnload, keyName } = this.defaultConfig
@@ -224,8 +251,6 @@ export default {
       if (recordSelect) {
         this.selectValue = ''
         this.placeholder2 = recordSelect[keyName]
-        // 显示到选取区域
-        this.setScroll2Target()
       }
       // 获取焦点就加载如果关闭则只会加载请求一次
       if (focusOnload) {
@@ -241,10 +266,11 @@ export default {
       // }
 
       this.$emit('focus')
+      this.$emit('visibleChange', true)
     },
     blur() {
+      this.selectValue = ''
       this.$emit('blur')
-      this.$refs.tree.filter('')
     },
     clear() {
       this.selectValue = null
@@ -252,6 +278,7 @@ export default {
       this.placeholder2 = this.defaultConfig.placeholder
       this.$emit('input', null)
       this.$emit('change', null)
+      this.$emit('clear')
     },
     miss() {
       this.visible = false
@@ -262,70 +289,61 @@ export default {
         this.placeholder2 = this.defaultConfig.placeholder
       }
     },
+    handleCurrentChange(value) {
+      this.defaultConfig.pagination.currentPage = value
+      this.fetchTableData()
+    },
+    rowStyle() {
+      return { cursor: 'pointer' }
+    },
+    indexMethod(index) {
+      return (index + 1) + (this.defaultConfig.pagination.currentPage - 1) * (this.defaultConfig.pagination.size)
+    },
     hidePopover() {
-      this.$emit('hidePopover')
+      this.$emit('visibleChange', false)
     },
-    handleNodeClick(row) {
-      const { selectAny, keyName, keyCode, selectValuekey } = this.defaultConfig
-      // 可设置返回对象内容
-      const selectValuekeyParams = {}
-      if (Array.isArray(selectValuekey) && selectValuekey.length) {
-        for (const item of selectValuekey) {
-          selectValuekeyParams[item] = row[item]
+    rowClick(row) {
+      const { keyName, keyCode, otherProps } = this.defaultConfig
+      this.selectValue = row[keyName]
+      this.recordSelect = row
+      const params = {}
+      if (Array.isArray(otherProps) && otherProps.length) {
+        for (const item of otherProps) {
+          params[item] = row[item]
         }
       }
-      const params = { [keyCode]: row[keyCode], [keyName]: row[keyName], ...selectValuekeyParams }
-
-      if (selectAny) {
-        // 选择最后任意
-        this.visible = false
-        this.selectValue = row[keyName]
-        this.recordSelect = row
-        this.$emit('input', params)
-        this.$emit('change', row)
-      } else {
-        // 选择最后一级-没有children、或者 !children.length
-        if (!row.children || !row.children.length) {
-          this.selectValue = row[keyName]
-          this.recordSelect = row
-          this.$emit('input', params)
-          this.$emit('change', row)
-          this.visible = false
-        }
-      }
+      const paramsList = { [keyCode]: row[keyCode], [keyName]: row[keyName], ...params }
+      this.$emit('input', paramsList)
+      this.$emit('change', row)
+      this.visible = false
     },
-    filterNode(value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    },
-    debounceInputChange() {
-
-    },
-    input(name) {
-      this.inputChange(name)
+    input() {
+      this.inputChange()
     },
     fetchTableData() {
-      const { extraParam } = this
-      const { url, method, focusOnload } = this.defaultConfig
+      const { extraParam, selectValue } = this
+      const { url, method, searchName } = this.defaultConfig
+      const { currentPage, size } = this.defaultConfig.pagination
       if (!url) false
-      this.loading = true
       this.tableData = []
-      // const params = Object.keys(extraParam).length ? { ...extraParam } : null
-      const params = isObject(extraParam) ? { ...extraParam } : {}
+      this.loading = true
+      const searchParams = { [searchName]: selectValue }
+      const extraParams = isObject(extraParam) ? Object.keys(extraParam).length ? { ...extraParam } : {} : {}
+      const searchParams2extraParams = Object.assign(searchParams, extraParams)
+      const params = { pageIndex: currentPage, pageSize: size, ...searchParams2extraParams }
       const paramsKey = method.toUpperCase() !== 'POST' ? 'params' : 'data'
-      request({ url, method: method, [paramsKey]: params }).then((data) => {
+      request({ url, method: method, [paramsKey]: params }).then((res) => {
         this.loading = false
-        if (data.success) {
-          const result = data.data
-          if (Array.isArray(result)) {
-            this.tableData = result || []
-            if (focusOnload) {
-              // 显示到选取区域
-              this.setScroll2Target()
-            }
+        const { data, success } = res
+        if (success) {
+          const result = data
+          if (Array.isArray(result.records)) {
+            this.tableData = result.records || []
+            this.defaultConfig.pagination.total = result.total || 0
           }
         }
       }).catch(e => {
+        // this.message({ message: '请勾选您需要处理的数据', type: 'error' })
         this.loading = false
       })
     }
@@ -337,9 +355,7 @@ export default {
 .CubeSelect {
   position: relative;
   min-width: 220px;
-  .el-input {
-    width: 100%;
-  }
+  // max-width: 420px;
   /deep/.el-input-group__append {
     background: #2f86f6;
     color: #ffffff;
@@ -353,22 +369,12 @@ export default {
   /deep/.el-popper {
     margin-top: 2px;
     width: 100%;
-    z-index: 99999!important;
+    z-index: 9999!important;
     overflow: hidden;
     position: absolute;
     left: 0;
     top: 34px;
     padding: 4px;
-    max-height: 320px;
-    min-height: 320px;
-    overflow-y: auto;
-    .loadingMark {
-      position: absolute !important;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
   }
   .pagination {
     margin-top: 4px;

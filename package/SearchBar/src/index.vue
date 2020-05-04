@@ -22,9 +22,17 @@
               :placeholder="item.placeholder"
             />
           </template>
+          <!-- 特别的组件 -->
           <template v-if="item.type === 'cubeSelectTree'">
             <CubeSelectTree
               ref="selectTree"
+              v-model="item.value"
+              :config="item.config || {} "
+            />
+          </template>
+          <template v-if="item.type === 'cubeSelect'">
+            <CubeSelect
+              ref="CubeSelect"
               v-model="item.value"
               :config="item.config || {} "
             />
@@ -204,19 +212,19 @@
 <script>
 
 //  常量类型
-const commonlyTypes = [
-  'input', 'select', 'option', 'cascader',
-  'date', 'datetime', 'date-month',
-  'tree', 'cubeSelect']
+const commonlyTypes = ['input', 'select', 'option', 'cascader', 'date', 'datetime', 'date-month', 'tree']
+//  特殊类型
+const cubeType = ['cubeSelect', 'cubeSelectTree']
 
 import { deepClone } from '../../utils'
-
+import CubeSelect from '../../CubeSelect'
 import CubeSelectTree from '../../CubeSelectTree'
 
 export default {
   name: 'SearchBar',
   componentName: 'SearchBar',
   components: {
+    CubeSelect,
     CubeSelectTree
   },
   props: {
@@ -288,7 +296,7 @@ export default {
               params[item['key1']] = null
               params[item['key2']] = null
             }
-          } else if (item['type'] === 'cubeSelectTree') {
+          } else if (cubeType.includes(item['type'])) {
             params[item['key']] = item.value ? item.value[item.config.keyCode] ? item.value[item.config.keyCode] : '' : ''
           } else if (item['type'] === 'search') {
             break

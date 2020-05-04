@@ -1,12 +1,19 @@
 
 import MaxHeight from './MaxHeight/src'
+import CubeDialog from './CubeDialog/src'
 import CubeTable from './CubeTable/src'
 import CubeTableList from './CubeTableList/src'
+
+import CubeSelect from './CubeSelect/src'
+import CubeCascader from './CubeCascader/src'
 import CubeSelectTree from './CubeSelectTree/src'
 
 const components = [
   MaxHeight,
   CubeTable,
+  CubeDialog,
+  CubeSelect,
+  CubeCascader,
   CubeTableList,
   CubeSelectTree
 ]
@@ -27,6 +34,9 @@ export default {
   install,
   MaxHeight,
   CubeTable,
+  CubeDialog,
+  CubeSelect,
+  CubeCascader,
   CubeTableList,
   CubeSelectTree
 }

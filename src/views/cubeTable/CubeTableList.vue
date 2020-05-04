@@ -1,15 +1,31 @@
 <template>
   <div>
     <CubeTableList :config="config" :extra-param="extraParam" />
+
+    <CubeDialog
+      title="信息表单"
+      fullscreen
+      append-to-body
+      :visible.sync="dialogVisible"
+    >
+      <Add v-if="dialogVisible" />
+    </CubeDialog>
+
   </div>
 </template>
 
 <script>
+
+import Add from './Add'
+
 export default {
   name: 'CubeTableListPage',
+  components: {
+    Add
+  },
   data() {
     return {
-      type: 1,
+      dialogVisible: false,
       extraParam: {
         objType: 2, fenceType: 1, searchType: 2
       },
@@ -19,9 +35,6 @@ export default {
           data: [
             [
               {
-                type: 'option', value: null, key: 'sectionId', placeholder: '请选择标段', class: 'w180', options: []
-              },
-              {
                 type: 'cubeSelectTree',
                 value: null,
                 key: 'sectionId',
@@ -30,11 +43,28 @@ export default {
                   keyCode: 'value',
                   url: '/map/getSectionTree',
                   focusOnload: false, // 仅仅加载一次
-                  placeholder: '请选择标段',
+                  placeholder: '请选择标段1',
                   treeDefaultProps: {
                     children: 'children',
                     label: 'label'
                   }
+                }
+              },
+              {
+                type: 'cubeSelect',
+                value: null,
+                key: 'sectionId',
+                config: {
+                  keyName: 'name',
+                  keyCode: 'sectionId',
+                  url: '/section/search',
+                  searchName: 'sectionName',
+                  focusOnload: true, // 仅仅加载一次
+                  placeholder: '请选择标段2',
+                  column: [
+                    { key: 'name', label: '名称' },
+                    { key: 'code', label: '编码' }
+                  ]
                 }
               },
               {
@@ -65,6 +95,7 @@ export default {
               { type: 'reset', name: '重置' }
             ],
             [
+              { type: 'add', name: '新增', action: () => this.add() },
               { type: 'button', btType: 'danger', icon: 'el-icon-delete', name: '作废' }
             ]
           ]
@@ -140,6 +171,11 @@ export default {
     setTimeout(_ => {
       this.extraParam.fenceType = 2
     }, 4000)
+  },
+  methods: {
+    add() {
+      this.dialogVisible = true
+    }
   }
 }
 </script>
