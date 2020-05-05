@@ -235,4 +235,9 @@ export default {
 </script>
 
 <style lang="scss">
+.CubeTableList{
+  /deep/.el-loading-mask{
+    z-index: 1000!important;
+  }
+}
 </style>

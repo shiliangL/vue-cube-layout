@@ -5,11 +5,15 @@
     v-loading="loading"
     :disabled="disabled"
     :filterable="defaultConfig.filterable"
+    :debounce="defaultConfig.debounce"
     :clearable="defaultConfig.clearable"
     :placeholder="placeholder2"
     :size="defaultConfig.size"
     :options="defaultConfig.options"
-    :props="{checkStrictly: true,emitPath:false,expandTrigger:'hover'}"
+    :props="{checkStrictly: defaultConfig.selectAny, emitPath:false, expandTrigger:'hover'}"
+    :value="defaultConfig.keyCode"
+    :label="defaultConfig.keyName"
+    :children="defaultConfig.children"
     @change="change"
   />
 </template>
@@ -23,32 +27,6 @@ import emitter from '../../mixProps/emitter'
 
 export default {
   name: 'CubeCascader',
-  directives: {
-    clickOutside: {
-      bind(el, binding, vnode) {
-        function clickHandler(e) {
-          // 这里判断点击的元素是否是本身，是本身，则返回
-          if (el.contains(e.target)) {
-            return false
-          }
-          // 判断指令中是否绑定了函数
-          if (binding.expression) {
-            // 如果绑定了函数 则调用那个函数，此处binding.value就是handleClose方法
-            binding.value(e)
-          }
-        }
-        // 给当前元素绑定个私有变量，方便在unbind中可以解除事件监听
-        el.__vueClickOutside__ = clickHandler
-        document.addEventListener('click', clickHandler)
-      },
-      update() { },
-      unbind(el, binding) {
-        // 解除事件监听
-        document.removeEventListener('click', el.__vueClickOutside__)
-        delete el.__vueClickOutside__
-      }
-    }
-  },
   mixins: [emitter],
   props: {
     validateEvent: {
@@ -62,9 +40,9 @@ export default {
     extraParam: {
       type: Object,
       default: () => {
-        return {
-          treeId: 'aed26b5a-00e8-4c87-99a5-3345582239f9'
-        }
+        // return {
+        //   treeId: 'aed26b5a-00e8-4c87-99a5-3345582239f9'
+        // }
       }
     },
     config: {
@@ -85,15 +63,17 @@ export default {
       defaultConfig: {
         placeholder: '请选择',
         clearable: true,
+        filterable: true,
+        debounce: 500,
         size: 'small',
+        selectAny: false, // 是否可选任意一级
         options: [],
-        value: 'value', // 指定选项的值为选项对象的某个属性值
-        label: 'label', // 指定选项标签为选项对象的某个属性值
+        keyCode: 'value', // 指定选项的值为选项对象的某个属性值
+        keyName: 'label', // 指定选项标签为选项对象的某个属性值
         children: 'children', // 指定选项的子选项为选项对象的某个属性
-        // 请求额外设置参数 -  网络数据加载区域
         method: 'GET',
-        url: '/customDept/tree',
-        focusOnload: false
+        url: '',
+        focusOnload: false // 是否获取焦点就加载 、 如果false则只会加载请求一次数据
       }
     }
   },
@@ -152,11 +132,11 @@ export default {
       const { extraParam } = this
       const { url, method } = this.defaultConfig
       if (!url) false
-      this.loading = true
+      // this.loading = true
       this.defaultConfig.options = []
       const params = isObject(extraParam) ? { ...extraParam } : {}
       const paramsKey = method.toUpperCase() !== 'POST' ? 'params' : 'data'
-      request({ url, method: method, [paramsKey]: params }).then((data) => {
+      request({ url, method: method.toUpperCase(), [paramsKey]: params }).then((data) => {
         this.loading = false
         if (data.success) {
           const result = data.data
@@ -171,5 +151,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.el-cascader {
+  width: 100%;
+}
 </style>

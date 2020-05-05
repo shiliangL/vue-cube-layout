@@ -43,7 +43,7 @@ export default {
                   keyCode: 'value',
                   url: '/map/getSectionTree',
                   focusOnload: false, // 仅仅加载一次
-                  placeholder: '请选择标段1',
+                  placeholder: '请选择标段-树形选择',
                   treeDefaultProps: {
                     children: 'children',
                     label: 'label'
@@ -59,12 +59,46 @@ export default {
                   keyCode: 'sectionId',
                   url: '/section/search',
                   searchName: 'sectionName',
-                  focusOnload: true, // 仅仅加载一次
-                  placeholder: '请选择标段2',
+                  focusOnload: false, // 仅仅加载一次
+                  placeholder: '请选择公司-页分',
                   column: [
                     { key: 'name', label: '名称' },
                     { key: 'code', label: '编码' }
                   ]
+                }
+              },
+              {
+                type: 'cubeSelect',
+                value: null,
+                key: 'sectionId',
+                config: {
+                  keyName: 'name',
+                  keyCode: 'companyId',
+                  method: 'GET',
+                  url: '/contract/getCompanyList',
+                  searchName: 'sectionName',
+                  focusOnload: true, // 仅仅加载一次
+                  isNoPage: true, // 是否是列表无分页数据
+                  placeholder: '请选择公司-无分页分',
+                  column: [
+                    { key: 'name', label: '名称', align: 'left' }
+                  ]
+                }
+              },
+              {
+                type: 'cubeCascader',
+                value: null,
+                key: 'companyId',
+                extraParam: {
+                  treeId: 'aed26b5a-00e8-4c87-99a5-3345582239f9'
+                },
+                config: {
+                  keyCode: 'value', // 指定选项的值为选项对象的某个属性值
+                  keyName: 'label', // 指定选项标签为选项对象的某个属性值
+                  children: 'children', // 指定选项的子选项为选项对象的某个属性
+                  method: 'GET',
+                  url: '/customDept/tree',
+                  placeholder: '公司名称-级联选择'
                 }
               },
               {

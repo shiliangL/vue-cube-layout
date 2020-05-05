@@ -33,6 +33,7 @@
         style="text-align: right; margin: 0"
       >
         <el-table
+          ref="tablePage"
           :data="tableData"
           style="width: 100%"
           size="mini"
@@ -52,6 +53,7 @@
             :key="index"
             show-overflow-tooltip
             :width="item.width ? item.width : null "
+            :header-align="defaultConfig.headerAlign"
             :align="item.align ? item.align : 'center' "
             :prop="item.prop"
             :label="item.label"
@@ -59,7 +61,7 @@
             <template slot-scope="scope">
               <template v-if="!item.render">
                 <template>
-                  <span>{{ scope.row[item.key] }}</span>
+                  <span :title="scope.row[item.key]">{{ scope.row[item.key] }}</span>
                 </template>
               </template>
               <template v-else>
@@ -74,6 +76,7 @@
           </el-table-column>
         </el-table>
         <el-pagination
+          v-if="!defaultConfig.isNoPage"
           small
           :pager-count="5"
           class="pagination"
@@ -190,7 +193,9 @@ export default {
         inputWidth: '220px', // 输入框宽度
         size: 'small',
         // 表格区域
+        isNoPage: false, // 是否是分页 默认是分页
         tableHeight: 250,
+        headerAlign: 'center',
         column: [
           { key: 'name', label: '名称' },
           { key: 'code', label: '编码' }
@@ -267,6 +272,10 @@ export default {
 
       this.$emit('focus')
       this.$emit('visibleChange', true)
+
+      setTimeout(_ => {
+        this.setTableCurrentRow()
+      }, 0)
     },
     blur() {
       this.selectValue = ''
@@ -299,6 +308,13 @@ export default {
     indexMethod(index) {
       return (index + 1) + (this.defaultConfig.pagination.currentPage - 1) * (this.defaultConfig.pagination.size)
     },
+    setTableCurrentRow() {
+      const { recordSelect } = this
+      if (!recordSelect) return
+      const { keyCode } = this.defaultConfig
+      const currentRow = this.tableData.find((item) => item[keyCode] === recordSelect[keyCode]) || null
+      this.$refs['tablePage'] && this.$refs['tablePage'].setCurrentRow(currentRow)
+    },
     hidePopover() {
       this.$emit('visibleChange', false)
     },
@@ -322,7 +338,7 @@ export default {
     },
     fetchTableData() {
       const { extraParam, selectValue } = this
-      const { url, method, searchName } = this.defaultConfig
+      const { url, method, searchName, isNoPage } = this.defaultConfig
       const { currentPage, size } = this.defaultConfig.pagination
       if (!url) false
       this.tableData = []
@@ -330,17 +346,25 @@ export default {
       const searchParams = { [searchName]: selectValue }
       const extraParams = isObject(extraParam) ? Object.keys(extraParam).length ? { ...extraParam } : {} : {}
       const searchParams2extraParams = Object.assign(searchParams, extraParams)
-      const params = { pageIndex: currentPage, pageSize: size, ...searchParams2extraParams }
+      const pageParams = { pageIndex: currentPage, pageSize: size }
+      const params = isNoPage ? { ...searchParams2extraParams } : { ...pageParams, ...searchParams2extraParams }
       const paramsKey = method.toUpperCase() !== 'POST' ? 'params' : 'data'
-      request({ url, method: method, [paramsKey]: params }).then((res) => {
+      request({ url, method: method.toUpperCase(), [paramsKey]: params }).then((res) => {
         this.loading = false
         const { data, success } = res
         if (success) {
           const result = data
-          if (Array.isArray(result.records)) {
-            this.tableData = result.records || []
-            this.defaultConfig.pagination.total = result.total || 0
+          if (isNoPage) {
+            this.tableData = result || []
+          } else {
+            if (Array.isArray(result.records)) {
+              this.tableData = result.records || []
+              this.defaultConfig.pagination.total = result.total || 0
+            }
           }
+          setTimeout(_ => {
+            this.setTableCurrentRow()
+          }, 0)
         }
       }).catch(e => {
         // this.message({ message: '请勾选您需要处理的数据', type: 'error' })
@@ -369,12 +393,15 @@ export default {
   /deep/.el-popper {
     margin-top: 2px;
     width: 100%;
-    z-index: 9999!important;
+    z-index: 2000!important;
     overflow: hidden;
     position: absolute;
     left: 0;
     top: 34px;
     padding: 4px;
+    .el-tooltip__popper{
+      z-index: 99999!important;
+    }
   }
   .pagination {
     margin-top: 4px;

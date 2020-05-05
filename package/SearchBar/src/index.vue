@@ -27,6 +27,7 @@
             <CubeSelectTree
               ref="selectTree"
               v-model="item.value"
+              :extra-param="item.extraParam ? item.extraParam : {} "
               :config="item.config || {} "
             />
           </template>
@@ -34,6 +35,15 @@
             <CubeSelect
               ref="CubeSelect"
               v-model="item.value"
+              :extra-param="item.extraParam ? item.extraParam : {} "
+              :config="item.config || {} "
+            />
+          </template>
+          <template v-if="item.type === 'cubeCascader'">
+            <CubeCascader
+              ref="CubeCascader"
+              v-model="item.value"
+              :extra-param="item.extraParam ? item.extraParam : {} "
               :config="item.config || {} "
             />
           </template>
@@ -212,19 +222,21 @@
 <script>
 
 //  常量类型
-const commonlyTypes = ['input', 'select', 'option', 'cascader', 'date', 'datetime', 'date-month', 'tree']
+const commonlyTypes = ['input', 'select', 'option', 'cascader', 'cubeCascader', 'date', 'datetime', 'date-month', 'tree']
 //  特殊类型
 const cubeType = ['cubeSelect', 'cubeSelectTree']
 
 import { deepClone } from '../../utils'
 import CubeSelect from '../../CubeSelect'
 import CubeSelectTree from '../../CubeSelectTree'
+import CubeCascader from '../../CubeCascader'
 
 export default {
   name: 'SearchBar',
   componentName: 'SearchBar',
   components: {
     CubeSelect,
+    CubeCascader,
     CubeSelectTree
   },
   props: {
@@ -372,7 +384,10 @@ export default {
       margin-top: 10px;
       margin-left: 4px;
     }
-
+    .el-date-editor {
+      margin-left: 4px;
+      margin-right: 4px;
+    }
     .el-range-editor--small.el-input__inner {
       padding-left: 5px;
       padding-right: 0;

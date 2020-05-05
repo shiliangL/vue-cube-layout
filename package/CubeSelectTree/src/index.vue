@@ -159,6 +159,7 @@ export default {
     value: {
       immediate: true,
       handler(value) {
+        console.log(value, 'sb')
         // 存在 一定是对象 不然显示很多问题
         if (value && isObject(value)) {
           const { keyName } = this.defaultConfig
@@ -211,7 +212,7 @@ export default {
                 y: true
               }
               Scroll2Target.scrollTo(el, 220, options)
-            }, 0)
+            }, 20)
           }
         }
       }, 200)
@@ -321,7 +322,9 @@ export default {
             this.tableData = result || []
             if (focusOnload) {
               // 显示到选取区域
-              this.setScroll2Target()
+              setTimeout(_ => {
+                this.setScroll2Target()
+              }, 20)
             }
           }
         }
