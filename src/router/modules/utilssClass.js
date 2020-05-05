@@ -9,14 +9,26 @@ const utilssClass = {
   name: 'utilssClass',
   meta: {
     title: '开发工具类',
-    icon: 'table'
+    icon: 'bug'
   },
   children: [
     {
-      path: 'cubeInput',
-      component: () => import('@/views/mapComponents/cubeInput'),
-      name: 'cubeInput',
-      meta: { title: '输入框', noCache: true }
+      path: 'methods',
+      component: () => import('@/views/utilssClass/methods'),
+      name: 'methods',
+      meta: { title: '全局方法', noCache: true }
+    },
+    {
+      path: 'mixProps',
+      component: () => import('@/views/utilssClass/mixProps'),
+      name: 'mixProps',
+      meta: { title: '混入方法', noCache: true }
+    },
+    {
+      path: 'directive',
+      component: () => import('@/views/utilssClass/directive'),
+      name: 'directive',
+      meta: { title: '指令方法', noCache: true }
     }
   ]
 }

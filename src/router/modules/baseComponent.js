@@ -8,8 +8,8 @@ const baseComponent = {
   redirect: 'noRedirect',
   name: 'baseComponents',
   meta: {
-    title: '基础组件',
-    icon: 'table'
+    title: '基础&组件',
+    icon: 'component'
   },
   children: [
     {

@@ -8,8 +8,8 @@ const baseComponent = {
   redirect: 'noRedirect',
   name: 'mapComponents',
   meta: {
-    title: '地图应用',
-    icon: 'table'
+    title: '地图&应用',
+    icon: 'map'
   },
   children: [
     {

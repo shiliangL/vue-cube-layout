@@ -8,7 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import utilssClass from './modules/utilssClass'
-import cubeTableRouter from './modules/table'
+import cubetable from './modules/cubetable'
 import graphsAndCharts from './modules/graphsAndCharts'
 import baseComponent from './modules/baseComponent'
 import layoutComponents from './modules/layoutComponents'
@@ -45,7 +45,7 @@ export const asyncRoutes = [
   utilssClass,
   layoutComponents,
   baseComponent,
-  cubeTableRouter,
+  cubetable,
   graphsAndCharts,
   mapComponent,
 

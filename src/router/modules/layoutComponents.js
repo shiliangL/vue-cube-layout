@@ -9,7 +9,7 @@ const layoutComponents = {
   name: 'layoutComponents',
   meta: {
     title: '布局&界面',
-    icon: 'table'
+    icon: 'layout'
   },
   children: [
     {
