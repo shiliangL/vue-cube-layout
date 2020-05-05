@@ -2,5 +2,7 @@ build/*.js
 src/assets
 src/Bmap
 src/vmap
+src/styles/icons
+
 public
 dist

@@ -8,6 +8,8 @@ import CubeSelect from './CubeSelect/src'
 import CubeCascader from './CubeCascader/src'
 import CubeSelectTree from './CubeSelectTree/src'
 
+import CubeButton from './CubeButton/src'
+
 const components = [
   MaxHeight,
   CubeTable,
@@ -15,7 +17,9 @@ const components = [
   CubeSelect,
   CubeCascader,
   CubeTableList,
-  CubeSelectTree
+  CubeSelectTree,
+
+  CubeButton
 ]
 
 const install = function(Vue, opts = {}) {
@@ -38,5 +42,7 @@ export default {
   CubeSelect,
   CubeCascader,
   CubeTableList,
-  CubeSelectTree
+  CubeSelectTree,
+
+  CubeButton
 }

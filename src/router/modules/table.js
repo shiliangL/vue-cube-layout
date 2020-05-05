@@ -8,7 +8,7 @@ const cubeTableRouter = {
   redirect: 'noRedirect',
   name: 'cubeTable',
   meta: {
-    title: 'cubeTable应用',
+    title: '业务表格列表',
     icon: 'table'
   },
   children: [
