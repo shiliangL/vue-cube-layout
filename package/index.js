@@ -4,6 +4,8 @@ import CubeDialog from './CubeDialog/src'
 import CubeTable from './CubeTable/src'
 import CubeTableList from './CubeTableList/src'
 
+import CubeChart from './CubeChart/src'
+
 import CubeSelect from './CubeSelect/src'
 import CubeCascader from './CubeCascader/src'
 import CubeSelectTree from './CubeSelectTree/src'
@@ -11,6 +13,7 @@ import CubeSelectTree from './CubeSelectTree/src'
 import CubeButton from './CubeButton/src'
 
 const components = [
+  CubeChart,
   MaxHeight,
   CubeTable,
   CubeDialog,
@@ -36,6 +39,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default {
   version: '0.0.51',
   install,
+  CubeChart,
   MaxHeight,
   CubeTable,
   CubeDialog,
