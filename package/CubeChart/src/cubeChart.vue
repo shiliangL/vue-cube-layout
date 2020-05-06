@@ -18,6 +18,7 @@ const INIT_TRIGGERS = ['theme', 'initOptions', 'autoresize']
 const REWATCH_TRIGGERS = ['manualUpdate', 'watchShallow']
 
 export default {
+  name: 'CubeChart',
   props: {
     // eslint-disable-next-line vue/require-default-prop
     options: Object,

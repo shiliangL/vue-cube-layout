@@ -1,10 +1,10 @@
 // import 'echarts'
 
-import CubeChart from './cubeChart'
+import cubeChart from './cubeChart'
 import buleTheme from './theme/cube-bule.json'
 import greenTheme from './theme/cube-green.json'
 
-CubeChart.registerTheme('cube-blue-theme', buleTheme)
-CubeChart.registerTheme('cube-green-theme', greenTheme)
+cubeChart.registerTheme('cube-blue-theme', buleTheme)
+cubeChart.registerTheme('cube-green-theme', greenTheme)
 
-export default CubeChart
+export default cubeChart
