@@ -59,6 +59,7 @@
     "screenfull": "4.2.0",
     "script-loader": "0.7.2",
     "throttle-debounce": "^1.0.1",
+    "topevery-element-ui": "0.0.20",
     "vue": "2.6.10",
     "vue-baidu-map": "^0.21.22",
     "vue-router": "3.0.2",

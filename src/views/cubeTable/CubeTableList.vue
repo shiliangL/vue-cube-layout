@@ -30,7 +30,7 @@ export default {
         objType: 2, fenceType: 1, searchType: 2
       },
       config: {
-        url: '/fenceAlarmSetting/getFenceAlarmRecordSearch',
+        url: 'http://hw-topevery-dev-ui:49526/fenceAlarmSetting/getFenceAlarmRecordSearch',
         search: {
           data: [
             [
@@ -41,7 +41,7 @@ export default {
                 config: {
                   keyName: 'label',
                   keyCode: 'value',
-                  url: '/map/getSectionTree',
+                  url: 'http://hw-topevery-dev-ui:49526/map/getSectionTree',
                   focusOnload: false, // 仅仅加载一次
                   placeholder: '请选择标段-树形选择',
                   treeDefaultProps: {
@@ -57,7 +57,7 @@ export default {
                 config: {
                   keyName: 'name',
                   keyCode: 'sectionId',
-                  url: '/section/search',
+                  url: 'http://hw-topevery-dev-ui:49526/section/search',
                   searchName: 'sectionName',
                   focusOnload: false, // 仅仅加载一次
                   placeholder: '请选择公司-页分',
@@ -75,7 +75,7 @@ export default {
                   keyName: 'name',
                   keyCode: 'companyId',
                   method: 'GET',
-                  url: '/contract/getCompanyList',
+                  url: 'http://hw-topevery-dev-ui:49526/contract/getCompanyList',
                   searchName: 'sectionName',
                   focusOnload: true, // 仅仅加载一次
                   isNoPage: true, // 是否是列表无分页数据

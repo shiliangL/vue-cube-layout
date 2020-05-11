@@ -1,12 +1,9 @@
 import Vue from 'vue'
 
-import Cookies from 'js-cookie'
-
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import './styles/icons/iconfont.js'
 import './styles/icons/iconfont.css'
 
-import Element from 'element-ui'
 import './styles/element-variables.scss'
 
 import './styles/index.scss' // global css
@@ -38,10 +35,6 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
-Vue.use(Element, {
-  size: Cookies.get('size') || 'small' // set element-ui default size
-})
-
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
@@ -65,8 +58,13 @@ Vue.use(BaiduMap, {
   ak: 'ggeG9Ii3jcwnXUvVXNQ6vjRYUXV5Ckhz'
 })
 
-import topUi from '@package/index'
-Vue.use(topUi)
+// import topUi from '@/package/index'
+// Vue.use(topUi)
+
+import 'topevery-element-ui/lib/theme-chalk/index.css'
+import ElementUI from 'topevery-element-ui/lib'
+
+Vue.use(ElementUI)
 
 new Vue({
   el: '#app',
