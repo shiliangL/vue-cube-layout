@@ -37,17 +37,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PanJiaChen/vue-element-admin.git"
-  },
-  "bugs": {
-    "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
+    "url": "git+https://github.com/shiliangL/vue-cube-layout"
   },
   "dependencies": {
     "axios": "0.18.1",
     "clipboard": "2.0.4",
     "dayjs": "^1.7.7",
     "echarts": "4.2.1",
-    "element-ui": "2.13.0",
     "fuse.js": "^5.2.3",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",
@@ -59,7 +55,7 @@
     "screenfull": "4.2.0",
     "script-loader": "0.7.2",
     "throttle-debounce": "^1.0.1",
-    "topevery-element-ui": "0.0.20",
+    "topevery-element-ui": "0.0.24",
     "vue": "2.6.10",
     "vue-baidu-map": "^0.21.22",
     "vue-router": "3.0.2",

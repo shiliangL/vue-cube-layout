@@ -1,3 +1,11 @@
+/*
+ * @Author: shiliangL
+ * @Date: 2020-04-04 15:53:26
+ * @LastEditTime: 2020-05-27 09:15:44
+ * @LastEditors: Do not edit
+ * @Description:
+ * @FilePath: /vue-next-admin/src/api/user.js
+ */
 // import request from '@/utils/request'
 
 // export function login(data) {
@@ -24,6 +32,14 @@
 // }
 
 import request from '@/utils/request'
+
+export function loginMock(data) {
+  return request({
+    url: '/vue-element-admin/user/login',
+    method: 'post',
+    data
+  })
+}
 
 export function login(data) {
   return request({

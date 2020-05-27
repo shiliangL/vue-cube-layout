@@ -1,6 +1,8 @@
 {{#if template}}
 <template>
-  <div />
+  <div>
+    {{ properCase name }}
+  </div>
 </template>
 {{/if}}
 
@@ -8,13 +10,23 @@
 <script>
 export default {
   name: '{{ properCase name }}',
-  props: {},
-  data() {
-    return {}
+  props: {
+
   },
-  created() {},
-  mounted() {},
-  methods: {}
+  data() {
+    return {
+
+    }
+  },
+  created() {
+
+  },
+  mounted() {
+
+  },
+  methods: {
+
+  }
 }
 </script>
 {{/if}}

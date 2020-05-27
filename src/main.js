@@ -1,3 +1,11 @@
+/*
+ * @Author: shiliangL
+ * @Date: 2020-05-11 16:04:06
+ * @LastEditTime: 2020-05-23 11:28:52
+ * @LastEditors: Do not edit
+ * @Description:
+ * @FilePath: /vue-next-admin/src/main.js
+ */
 import Vue from 'vue'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
@@ -61,8 +69,8 @@ Vue.use(BaiduMap, {
 // import topUi from '@/package/index'
 // Vue.use(topUi)
 
-import 'topevery-element-ui/lib/theme-chalk/index.css'
-import ElementUI from 'topevery-element-ui/lib'
+// import 'topevery-element-ui/lib/theme-chalk/index.css'
+import ElementUI from 'topevery-element-ui'
 
 Vue.use(ElementUI)
 

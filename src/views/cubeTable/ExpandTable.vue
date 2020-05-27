@@ -35,7 +35,7 @@ export default {
         sectionId: '', beginDate: '', endDate: ''
       },
       config: {
-        url: 'http://hw-topevery-dev-ui:49526/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsList',
+        url: 'http://221.10.126.230:5002/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsList',
         search: {
           data: [
             [
@@ -88,7 +88,7 @@ export default {
         }
       },
       config2: {
-        url: 'http://hw-topevery-dev-ui:49526/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayList',
+        url: 'http://221.10.126.230:5002/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayList',
         search: {
           data: []
         },
@@ -127,7 +127,7 @@ export default {
         }
       },
       config3: {
-        url: 'http://hw-topevery-dev-ui:49526/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayLsList',
+        url: 'http://221.10.126.230:5002/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayLsList',
         search: {
           data: []
         },

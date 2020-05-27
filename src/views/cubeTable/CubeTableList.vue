@@ -2,14 +2,14 @@
   <div>
     <CubeTableList :config="config" :extra-param="extraParam" />
 
-    <CubeDialog
+    <el-dialog
       title="信息表单"
       fullscreen
       append-to-body
       :visible.sync="dialogVisible"
     >
       <Add v-if="dialogVisible" />
-    </CubeDialog>
+    </el-dialog>
 
   </div>
 </template>
@@ -17,6 +17,8 @@
 <script>
 
 import Add from './Add'
+
+import { loginMock } from '@/api/user'
 
 export default {
   name: 'CubeTableListPage',
@@ -30,7 +32,7 @@ export default {
         objType: 2, fenceType: 1, searchType: 2
       },
       config: {
-        url: 'http://hw-topevery-dev-ui:49526/fenceAlarmSetting/getFenceAlarmRecordSearch',
+        url: 'http://221.10.126.230:5002/fenceAlarmSetting/getFenceAlarmRecordSearch',
         search: {
           data: [
             [
@@ -41,7 +43,7 @@ export default {
                 config: {
                   keyName: 'label',
                   keyCode: 'value',
-                  url: 'http://hw-topevery-dev-ui:49526/map/getSectionTree',
+                  url: 'http://221.10.126.230:5002/map/getSectionTree',
                   focusOnload: false, // 仅仅加载一次
                   placeholder: '请选择标段-树形选择',
                   treeDefaultProps: {
@@ -57,7 +59,7 @@ export default {
                 config: {
                   keyName: 'name',
                   keyCode: 'sectionId',
-                  url: 'http://hw-topevery-dev-ui:49526/section/search',
+                  url: 'http://221.10.126.230:5002/section/search',
                   searchName: 'sectionName',
                   focusOnload: false, // 仅仅加载一次
                   placeholder: '请选择公司-页分',
@@ -75,7 +77,7 @@ export default {
                   keyName: 'name',
                   keyCode: 'companyId',
                   method: 'GET',
-                  url: 'http://hw-topevery-dev-ui:49526/contract/getCompanyList',
+                  url: 'http://221.10.126.230:5002/contract/getCompanyList',
                   searchName: 'sectionName',
                   focusOnload: true, // 仅仅加载一次
                   isNoPage: true, // 是否是列表无分页数据
@@ -97,8 +99,9 @@ export default {
                   keyName: 'label', // 指定选项标签为选项对象的某个属性值
                   children: 'children', // 指定选项的子选项为选项对象的某个属性
                   method: 'GET',
-                  url: '/customDept/tree',
-                  placeholder: '公司名称-级联选择'
+                  url: '',
+                  placeholder: '公司名称-级联选择',
+                  options: []
                 }
               },
               {
@@ -209,6 +212,9 @@ export default {
   methods: {
     add() {
       this.dialogVisible = true
+      loginMock({ admin: 121221, key: 12213 }).then((value) => {
+        console.log(value)
+      })
     }
   }
 }

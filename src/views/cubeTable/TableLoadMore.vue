@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CubeTableList :config="config" @expandChange="expandChange">
+    <CubeTableList :config="config" :extra-param="extraParam" @expandChange="expandChange">
       <template slot="expand">
         <CubeTableList :config="config2" :extra-param="extraParam" @expandChange="expandChange2">
           <template slot="expand">
@@ -29,13 +29,13 @@ export default {
     return {
       type: 1,
       extraParam: {
-        sectionId: '', beginDate: '', endDate: ''
+        objType: 2, fenceType: 2, searchType: 2
       },
       extraParam3: {
         sectionId: '', beginDate: '', endDate: ''
       },
       config: {
-        url: '/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsList',
+        url: 'http://221.10.126.230:5002/fenceAlarmSetting/getFenceAlarmRecordSearch',
         search: {
           data: [
             [
@@ -90,7 +90,7 @@ export default {
         }
       },
       config2: {
-        url: '/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayList',
+        url: 'http://221.10.126.230:5002/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayList',
         search: {
           data: []
         },
@@ -129,7 +129,7 @@ export default {
         }
       },
       config3: {
-        url: '/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayLsList',
+        url: 'http://221.10.126.230:5002/alarmPersonAttendanceList/getAlarmSimilarTracePersonGpsDayLsList',
         search: {
           data: []
         },
